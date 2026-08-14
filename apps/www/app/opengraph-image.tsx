@@ -1,6 +1,5 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
 export const alt = "Handset UI — messaging and calling components for your product";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -41,7 +40,7 @@ export default function OpengraphImage() {
           >
             h
           </div>
-          <div style={{ fontSize: 30, fontWeight: 600, letterSpacing: -0.5 }}>
+          <div style={{ display: "flex", fontSize: 30, fontWeight: 600, letterSpacing: -0.5 }}>
             handset<span style={{ color: "#8f88ff" }}>/ui</span>
           </div>
         </div>
