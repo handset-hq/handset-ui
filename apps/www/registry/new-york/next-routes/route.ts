@@ -49,6 +49,10 @@ const ALLOWED: { method: string; match: (path: string) => boolean }[] = [
   { method: "POST", match: (p) => p === "phone_numbers" },
   { method: "GET", match: (p) => /^port_ins\/[\w]+$/.test(p) },
   { method: "GET", match: (p) => p === "usage" },
+  // Softphone login tokens. Resolve WHICH web client belongs to the
+  // signed-in agent in your session logic — don't let users mint tokens
+  // for someone else's seat.
+  { method: "POST", match: (p) => /^web_clients\/[\w]+\/tokens$/.test(p) },
 ];
 
 async function proxy(req: NextRequest, params: Promise<{ handset: string[] }>) {

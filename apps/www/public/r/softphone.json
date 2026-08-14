@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "softphone",
+  "title": "Softphone",
+  "description": "A phone that lives inside your product: connection status, dialer, in-call controls, and inbound ringing in one panel.",
+  "dependencies": [
+    "@handset/webrtc"
+  ],
+  "registryDependencies": [
+    "@handset/dialer",
+    "@handset/call-hud",
+    "@handset/incoming-call-toast"
+  ],
+  "files": [
+    {
+      "path": "registry/new-york/softphone/softphone.tsx",
+      "content": "\"use client\";\n\nimport type { Softphone as SoftphoneInstance } from \"@handset/webrtc\";\nimport { useSoftphone } from \"@handset/webrtc/react\";\nimport { cn } from \"@/lib/utils\";\nimport { Dialer } from \"@/components/handset/dialer\";\nimport { CallHUD } from \"@/components/handset/call-hud\";\nimport { IncomingCallToast } from \"@/components/handset/incoming-call-toast\";\n\nexport interface SoftphonePanelProps {\n  softphone: SoftphoneInstance;\n  /** Caller ID presented on outbound calls — one of the tenant's numbers. */\n  callerNumber?: string;\n  className?: string;\n}\n\nconst STATUS_LABEL: Record<string, string> = {\n  idle: \"Offline\",\n  connecting: \"Connecting…\",\n  ready: \"Ready\",\n  reconnecting: \"Reconnecting…\",\n  error: \"Connection error\",\n};\n\n/**\n * The whole phone in one panel: connection state, dialer, in-call bar, and\n * inbound ringing — a phone that lives inside your product.\n */\nexport function SoftphonePanel({ softphone, callerNumber, className }: SoftphonePanelProps) {\n  const { status } = useSoftphone({ softphone });\n\n  return (\n    <div className={cn(\"w-fit space-y-3 rounded-lg border p-4\", className)}>\n      <div className=\"flex items-center justify-between gap-6\">\n        <p className=\"text-sm font-medium\">Phone</p>\n        <span className=\"flex items-center gap-1.5 text-xs text-muted-foreground\">\n          <span\n            className={cn(\n              \"inline-flex h-2 w-2 rounded-full\",\n              status === \"ready\" && \"bg-primary\",\n              (status === \"connecting\" || status === \"reconnecting\") && \"animate-pulse bg-muted-foreground\",\n              status === \"error\" && \"bg-destructive\",\n              status === \"idle\" && \"bg-muted-foreground/50\",\n            )}\n          />\n          {STATUS_LABEL[status] ?? status}\n        </span>\n      </div>\n      <CallHUD softphone={softphone} />\n      <Dialer softphone={softphone} callerNumber={callerNumber} />\n      <IncomingCallToast softphone={softphone} position=\"static\" className=\"w-full\" />\n    </div>\n  );\n}\n",
+      "type": "registry:component",
+      "target": "components/handset/softphone.tsx"
+    }
+  ],
+  "type": "registry:block"
+}

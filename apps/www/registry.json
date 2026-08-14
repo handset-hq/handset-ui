@@ -217,6 +217,63 @@
       ]
     },
     {
+      "name": "dialer",
+      "type": "registry:component",
+      "title": "Dialer",
+      "description": "A phone keypad: type or tap a number and call from the browser. In-call keys send DTMF.",
+      "dependencies": ["@handset/webrtc", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/new-york/dialer/dialer.tsx",
+          "type": "registry:component",
+          "target": "components/handset/dialer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "call-hud",
+      "type": "registry:component",
+      "title": "Call HUD",
+      "description": "The in-call bar: who you're talking to, a live timer, mute, hang up. Renders nothing while quiet.",
+      "dependencies": ["@handset/webrtc", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/new-york/call-hud/call-hud.tsx",
+          "type": "registry:component",
+          "target": "components/handset/call-hud.tsx"
+        }
+      ]
+    },
+    {
+      "name": "incoming-call-toast",
+      "type": "registry:component",
+      "title": "Incoming call toast",
+      "description": "Rings on screen when a call comes in — caller number, answer, decline. Mount once; silent until it rings.",
+      "dependencies": ["@handset/webrtc", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/new-york/incoming-call-toast/incoming-call-toast.tsx",
+          "type": "registry:component",
+          "target": "components/handset/incoming-call-toast.tsx"
+        }
+      ]
+    },
+    {
+      "name": "softphone",
+      "type": "registry:block",
+      "title": "Softphone",
+      "description": "A phone that lives inside your product: connection status, dialer, in-call controls, and inbound ringing in one panel.",
+      "dependencies": ["@handset/webrtc"],
+      "registryDependencies": ["@handset/dialer", "@handset/call-hud", "@handset/incoming-call-toast"],
+      "files": [
+        {
+          "path": "registry/new-york/softphone/softphone.tsx",
+          "type": "registry:component",
+          "target": "components/handset/softphone.tsx"
+        }
+      ]
+    },
+    {
       "name": "next-routes",
       "type": "registry:file",
       "title": "Next.js proxy routes",

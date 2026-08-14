@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "incoming-call-toast",
+  "title": "Incoming call toast",
+  "description": "Rings on screen when a call comes in — caller number, answer, decline. Mount once; silent until it rings.",
+  "dependencies": [
+    "@handset/webrtc",
+    "lucide-react"
+  ],
+  "files": [
+    {
+      "path": "registry/new-york/incoming-call-toast/incoming-call-toast.tsx",
+      "content": "\"use client\";\n\nimport type { Softphone } from \"@handset/webrtc\";\nimport { useSoftphone } from \"@handset/webrtc/react\";\nimport { Phone, PhoneOff } from \"lucide-react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface IncomingCallToastProps {\n  softphone: Softphone;\n  formatNumber?: (e164: string) => string;\n  /**\n   * Where the toast floats. Defaults to bottom-right. Pass \"static\" to\n   * render inline instead (the softphone block does this).\n   */\n  position?: \"bottom-right\" | \"top-right\" | \"static\";\n  className?: string;\n}\n\n/**\n * Rings on screen when a call comes in: caller number, answer, decline.\n * Mount it once anywhere in your app; it renders nothing while quiet.\n */\nexport function IncomingCallToast({\n  softphone,\n  formatNumber = formatUS,\n  position = \"bottom-right\",\n  className,\n}: IncomingCallToastProps) {\n  const { incoming } = useSoftphone({ softphone, autoConnect: false });\n  if (!incoming) return null;\n\n  return (\n    <div\n      role=\"alertdialog\"\n      aria-label={`Incoming call from ${formatNumber(incoming.remoteNumber)}`}\n      className={cn(\n        \"flex w-72 items-center gap-3 rounded-lg border bg-background p-3.5 shadow-lg\",\n        position === \"bottom-right\" && \"fixed bottom-4 right-4 z-50\",\n        position === \"top-right\" && \"fixed right-4 top-4 z-50\",\n        className,\n      )}\n    >\n      <span className=\"relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10\">\n        <span className=\"absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/30\" />\n        <Phone className=\"relative h-4 w-4 text-primary\" />\n      </span>\n      <div className=\"min-w-0 flex-1\">\n        <p className=\"truncate text-sm font-medium tabular-nums\">{formatNumber(incoming.remoteNumber)}</p>\n        <p className=\"text-xs text-muted-foreground\">Incoming call…</p>\n      </div>\n      <button\n        type=\"button\"\n        onClick={() => void incoming.reject()}\n        aria-label=\"Decline\"\n        className=\"inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-destructive text-white transition-opacity hover:opacity-90\"\n      >\n        <PhoneOff className=\"h-4 w-4\" />\n      </button>\n      <button\n        type=\"button\"\n        onClick={() => void incoming.answer()}\n        aria-label=\"Answer\"\n        className=\"inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-opacity hover:opacity-90\"\n      >\n        <Phone className=\"h-4 w-4\" />\n      </button>\n    </div>\n  );\n}\n\nfunction formatUS(e164: string): string {\n  const m = /^\\+1(\\d{3})(\\d{3})(\\d{4})$/.exec(e164);\n  return m ? `(${m[1]}) ${m[2]}-${m[3]}` : e164;\n}\n",
+      "type": "registry:component",
+      "target": "components/handset/incoming-call-toast.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

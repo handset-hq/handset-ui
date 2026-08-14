@@ -11,11 +11,13 @@ export const DOCS_NAV = [
       { title: "Introduction", href: "/docs" },
       { title: "Installation", href: "/docs/installation" },
       { title: "Architecture", href: "/docs/architecture" },
+      { title: "Softphone setup", href: "/docs/softphone-setup" },
     ],
   },
   {
     label: "Blocks",
     items: [
+      { title: "Softphone", href: "/docs/components/softphone" },
       { title: "Phone system", href: "/docs/components/phone-system" },
       { title: "Contact timeline", href: "/docs/components/contact-timeline" },
       { title: "Messaging", href: "/docs/components/messaging" },
@@ -36,6 +38,9 @@ export const DOCS_NAV = [
       { title: "Port status", href: "/docs/components/port-status" },
       { title: "Texting readiness", href: "/docs/components/texting-readiness" },
       { title: "Usage meter", href: "/docs/components/usage-meter" },
+      { title: "Dialer", href: "/docs/components/dialer" },
+      { title: "Call HUD", href: "/docs/components/call-hud" },
+      { title: "Incoming call toast", href: "/docs/components/incoming-call-toast" },
       { title: "Next.js routes", href: "/docs/components/next-routes" },
     ],
   },
