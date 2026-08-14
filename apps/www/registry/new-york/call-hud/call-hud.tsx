@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import type { Softphone } from "@handset/webrtc";
 import { useSoftphone } from "@handset/webrtc/react";
 import { Mic, MicOff, PhoneOff } from "lucide-react";
@@ -9,6 +10,12 @@ export interface CallHUDProps {
   softphone: Softphone;
   /** Format the remote number for display. Defaults to a US formatter. */
   formatNumber?: (e164: string) => string;
+  /**
+   * Let the user drag the bar anywhere on screen (grab anywhere except the
+   * buttons). Position resets when the call ends. Pair with a `fixed`
+   * className so the bar floats.
+   */
+  draggable?: boolean;
   className?: string;
 }
 
@@ -16,18 +23,43 @@ export interface CallHUDProps {
  * The in-call bar: who you're talking to, a live timer, mute, hang up.
  * Renders nothing when no call is in progress — safe to mount permanently.
  */
-export function CallHUD({ softphone, formatNumber = formatUS, className }: CallHUDProps) {
+export function CallHUD({ softphone, formatNumber = formatUS, draggable = false, className }: CallHUDProps) {
   const { call, elapsedSeconds } = useSoftphone({ softphone, autoConnect: false });
+  const [offset, setOffset] = React.useState({ x: 0, y: 0 });
+  const drag = React.useRef<{ startX: number; startY: number; baseX: number; baseY: number } | null>(null);
+
   if (!call || call.state === "ended" || (call.direction === "inbound" && call.state === "ringing")) {
+    if (offset.x !== 0 || offset.y !== 0) setOffset({ x: 0, y: 0 });
     return null;
   }
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!draggable || (e.target as HTMLElement).closest("button")) return;
+    drag.current = { startX: e.clientX, startY: e.clientY, baseX: offset.x, baseY: offset.y };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const d = drag.current;
+    if (!d) return;
+    setOffset({ x: d.baseX + e.clientX - d.startX, y: d.baseY + e.clientY - d.startY });
+  };
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    drag.current = null;
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+  };
 
   return (
     <div
       className={cn(
         "flex items-center gap-3 rounded-lg border bg-background px-4 py-2.5 shadow-sm",
+        draggable && "cursor-grab touch-none select-none active:cursor-grabbing",
         className,
       )}
+      style={draggable ? { transform: `translate(${offset.x}px, ${offset.y}px)` } : undefined}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={endDrag}
+      onPointerCancel={endDrag}
       role="status"
       aria-label="Active call"
     >

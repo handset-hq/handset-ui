@@ -12,7 +12,7 @@ export interface IncomingCallToastProps {
    * Where the toast floats. Defaults to bottom-right. Pass "static" to
    * render inline instead (the softphone block does this).
    */
-  position?: "bottom-right" | "top-right" | "static";
+  position?: "bottom-right" | "bottom-left" | "top-right" | "top-left" | "static";
   className?: string;
 }
 
@@ -36,7 +36,9 @@ export function IncomingCallToast({
       className={cn(
         "flex w-72 items-center gap-3 rounded-lg border bg-background p-3.5 shadow-lg",
         position === "bottom-right" && "fixed bottom-4 right-4 z-50",
+        position === "bottom-left" && "fixed bottom-4 left-4 z-50",
         position === "top-right" && "fixed right-4 top-4 z-50",
+        position === "top-left" && "fixed left-4 top-4 z-50",
         className,
       )}
     >

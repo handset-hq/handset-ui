@@ -40,7 +40,7 @@ export default function IncomingCallToastDocs() {
         <PropsTable
           rows={[
             { name: "softphone", type: "Softphone", description: "The softphone instance." },
-            { name: "position", type: '"bottom-right" | "top-right" | "static"', default: '"bottom-right"', description: "Float it, or render inline with static." },
+            { name: "position", type: '"bottom-right" | "bottom-left" | "top-right" | "top-left" | "static"', default: '"bottom-right"', description: "Which corner the toast floats in, or render inline with static." },
             { name: "formatNumber", type: "(e164: string) => string", default: "US formatter", description: "Display formatting for the caller." },
             { name: "className", type: "string", description: "Merged onto the toast." },
           ]}
