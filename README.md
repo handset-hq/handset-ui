@@ -76,6 +76,12 @@ demo works with zero setup.
 - A [Handset](https://handset.dev) account for real traffic — the demo runs on
   mock data without one
 
+## Roadmap
+
+See [ROADMAP.md](ROADMAP.md) — shipped components, what's next (call
+summaries, MMS attachments, more framework proxies), and non-goals. Issues
+with real use cases move items up the list.
+
 ## License
 
 [MIT](LICENSE) © Handset HQ, Inc.
