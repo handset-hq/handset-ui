@@ -121,12 +121,130 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ handset: s
     if (!call) return NextResponse.json({ error: { code: "not_found", message: "No such call" } }, { status: 404 });
     return NextResponse.json(materializeCall(call));
   }
+  if (resource === "phone_numbers" && id === "available") {
+    const area = _req.nextUrl.searchParams.get("area_code") ?? "415";
+    const localities = ["San Rafael", "Sausalito", "Mill Valley", "Novato", "San Francisco", "Larkspur"];
+    const data = Array.from({ length: 6 }, (_, i) => ({
+      phone_number: `+1${area}555${String(100 + i * 37).padStart(4, "0")}`,
+      locality: localities[i % localities.length],
+      region: "CA",
+      capabilities: ["sms", "mms", "voice"],
+      monthly_price_usd: "2.00",
+    }));
+    return NextResponse.json({ data });
+  }
+  if (resource === "phone_numbers" && id) {
+    const num = phoneNumbers.find((n) => n.id === id);
+    if (!num) return NextResponse.json({ error: { code: "not_found", message: "No such number" } }, { status: 404 });
+    return NextResponse.json(materializeNumber(num));
+  }
+  if (resource === "port_ins" && id) {
+    const port = portIns.find((p) => p.id === id);
+    if (!port) return NextResponse.json({ error: { code: "not_found", message: "No such port" } }, { status: 404 });
+    return NextResponse.json(materializePort(port));
+  }
+  if (resource === "usage") {
+    return NextResponse.json({
+      object: "usage_summary",
+      mode: "test",
+      start: new Date(NOW - 12 * 86_400_000).toISOString(),
+      end: new Date(NOW).toISOString(),
+      data: [
+        { kind: "sms_segment_outbound", quantity: 4218 },
+        { kind: "sms_segment_inbound", quantity: 1877 },
+        { kind: "voice_minute_outbound", quantity: 342 },
+        { kind: "voice_minute_inbound", quantity: 518 },
+        { kind: "transcription_minute", quantity: 296 },
+        { kind: "number_month", quantity: 12 },
+      ],
+    });
+  }
   if (resource === "demo-audio") {
     return new NextResponse(new Uint8Array(demoWav()), {
       headers: { "content-type": "audio/wav", "cache-control": "public, max-age=3600" },
     });
   }
   return NextResponse.json({ error: { code: "not_found", message: "Unknown route" } }, { status: 404 });
+}
+
+// ---------- numbers / porting demo data ----------
+
+interface DemoNumber {
+  id: string;
+  phone_number: string;
+  campaign_id?: string | null;
+  messaging_ready: boolean;
+  created_at: string;
+  /** Purchased in this session: campaign attaches at +8s, ready at +20s. */
+  boughtAt?: number;
+}
+
+const phoneNumbers: DemoNumber[] = [
+  { id: "num_demo", phone_number: "+14155550100", campaign_id: "cmp_demo", messaging_ready: true, created_at: minutesAgo(60 * 24 * 30) },
+  { id: "num_demo_pending", phone_number: "+14155550177", campaign_id: "cmp_demo_2", messaging_ready: false, created_at: minutesAgo(60 * 24 * 2) },
+];
+
+function materializeNumber(num: DemoNumber) {
+  if (num.boughtAt === undefined) return { ...num, boughtAt: undefined };
+  const elapsed = (Date.now() - num.boughtAt) / 1000;
+  return {
+    ...num,
+    campaign_id: elapsed >= 8 ? "cmp_demo" : null,
+    messaging_ready: elapsed >= 20,
+    boughtAt: undefined,
+  };
+}
+
+interface DemoPort {
+  id: string;
+  phone_numbers: string[];
+  /** "live" ports advance by wall-clock; otherwise status is fixed. */
+  live?: boolean;
+  status: string;
+  status_detail?: string | null;
+  foc_date?: string | null;
+  startedAt: number;
+}
+
+const portIns: DemoPort[] = [
+  { id: "port_demo_live", phone_numbers: ["+14155550142"], live: true, status: "draft", startedAt: NOW },
+  {
+    id: "port_demo_action",
+    phone_numbers: ["+14155550166"],
+    status: "action_needed",
+    status_detail: "Account number doesn't match the losing carrier's records.",
+    startedAt: NOW,
+  },
+];
+
+/** Live port sim: draft → in_review (5s) → foc_confirmed (25s) → completed (45s). */
+function materializePort(port: DemoPort) {
+  let status = port.status;
+  let foc: string | null = port.foc_date ?? null;
+  if (port.live) {
+    const elapsed = (Date.now() - port.startedAt) / 1000;
+    if (elapsed >= 45) status = "completed";
+    else if (elapsed >= 25) status = "foc_confirmed";
+    else if (elapsed >= 5) status = "in_review";
+    else status = "draft";
+    if (status === "foc_confirmed" || status === "completed") {
+      foc = new Date(port.startedAt + 3 * 86_400_000).toISOString();
+    }
+  }
+  return {
+    id: port.id,
+    tenant_id: "tnt_demo",
+    phone_numbers: port.phone_numbers,
+    status,
+    status_detail: status === "action_needed" ? port.status_detail : null,
+    entity_name: "Brightside Property Co",
+    authorized_person: "Alex Rivera",
+    billing_phone_number: port.phone_numbers[0],
+    account_number: "••••4821",
+    service_address: { street: "128 Main St", city: "San Rafael", state: "CA", postal_code: "94901" },
+    foc_date: foc,
+    created_at: new Date(port.startedAt).toISOString(),
+  };
 }
 
 // ---------- voice demo data ----------
@@ -277,6 +395,20 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ handset: s
     };
     calls.unshift(call);
     return NextResponse.json(materializeCall(call), { status: 202 });
+  }
+  if (handset[0] === "phone_numbers") {
+    const body = (await req.json()) as { phone_number: string };
+    counter += 1;
+    const num: DemoNumber = {
+      id: `num_demo_bought_${counter}`,
+      phone_number: body.phone_number,
+      campaign_id: null,
+      messaging_ready: false,
+      created_at: new Date().toISOString(),
+      boughtAt: Date.now(),
+    };
+    phoneNumbers.push(num);
+    return NextResponse.json(materializeNumber(num), { status: 201 });
   }
   if (handset[0] !== "messages") {
     return NextResponse.json({ error: { code: "not_found", message: "Unknown route" } }, { status: 404 });

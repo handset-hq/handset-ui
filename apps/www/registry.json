@@ -118,6 +118,75 @@
       ]
     },
     {
+      "name": "opt-in-form",
+      "type": "registry:component",
+      "title": "Opt-in form",
+      "description": "A carrier-compliant SMS opt-in form whose shape survived a real TCR review — optional consent checkbox, full CTIA disclosure, explicit not-enrolled path.",
+      "files": [
+        {
+          "path": "registry/new-york/opt-in-form/opt-in-form.tsx",
+          "type": "registry:component",
+          "target": "components/handset/opt-in-form.tsx"
+        }
+      ]
+    },
+    {
+      "name": "number-picker",
+      "type": "registry:component",
+      "title": "Number picker",
+      "description": "Area-code search and one-click purchase — the self-serve 'pick your business number' onboarding step.",
+      "dependencies": ["@handset/react", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/new-york/number-picker/number-picker.tsx",
+          "type": "registry:component",
+          "target": "components/handset/number-picker.tsx"
+        }
+      ]
+    },
+    {
+      "name": "port-status",
+      "type": "registry:component",
+      "title": "Port status",
+      "description": "A port-in request as a stepper — draft, review, confirmed date, done — with carrier rejections surfaced as fixable callouts.",
+      "dependencies": ["@handset/react", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/new-york/port-status/port-status.tsx",
+          "type": "registry:component",
+          "target": "components/handset/port-status.tsx"
+        }
+      ]
+    },
+    {
+      "name": "texting-readiness",
+      "type": "registry:component",
+      "title": "Texting readiness",
+      "description": "A number's path to messaging as a checklist: active, campaign attached, carrier approved. 10DLC without the mystery.",
+      "dependencies": ["@handset/react", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/new-york/texting-readiness/texting-readiness.tsx",
+          "type": "registry:component",
+          "target": "components/handset/texting-readiness.tsx"
+        }
+      ]
+    },
+    {
+      "name": "usage-meter",
+      "type": "registry:component",
+      "title": "Usage meter",
+      "description": "A tenant's period usage as labeled quantities with comparative bars — show or re-bill customers their own traffic.",
+      "dependencies": ["@handset/react"],
+      "files": [
+        {
+          "path": "registry/new-york/usage-meter/usage-meter.tsx",
+          "type": "registry:component",
+          "target": "components/handset/usage-meter.tsx"
+        }
+      ]
+    },
+    {
       "name": "next-routes",
       "type": "registry:file",
       "title": "Next.js proxy routes",

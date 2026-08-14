@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "texting-readiness",
+  "title": "Texting readiness",
+  "description": "A number's path to messaging as a checklist: active, campaign attached, carrier approved. 10DLC without the mystery.",
+  "dependencies": [
+    "@handset/react",
+    "lucide-react"
+  ],
+  "files": [
+    {
+      "path": "registry/new-york/texting-readiness/texting-readiness.tsx",
+      "content": "\"use client\";\n\nimport { usePhoneNumber, type UsePhoneNumberOptions } from \"@handset/react\";\nimport { Check, Clock } from \"lucide-react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface TextingReadinessProps extends UsePhoneNumberOptions {\n  phoneNumberId: string | null;\n  className?: string;\n}\n\n/**\n * Why can't I text yet? — a number's path to messaging, made visible:\n * active → campaign attached → carrier approved. 10DLC without the mystery.\n */\nexport function TextingReadiness({ phoneNumberId, className, ...options }: TextingReadinessProps) {\n  const { number, isLoading, error } = usePhoneNumber(phoneNumberId, options);\n\n  if (isLoading && !number) {\n    return <div className={cn(\"h-28 animate-pulse rounded-lg border bg-muted/40\", className)} aria-hidden=\"true\" />;\n  }\n  if (error) return <p className={cn(\"text-sm text-destructive\", className)}>{error.message}</p>;\n  if (!number) return null;\n\n  const hasCampaign = Boolean(number.campaign_id);\n  const ready = Boolean(number.messaging_ready);\n\n  const checks: { label: string; done: boolean; pendingHint?: string }[] = [\n    { label: \"Number active\", done: true },\n    {\n      label: \"10DLC campaign attached\",\n      done: hasCampaign,\n      pendingHint: \"Register a campaign for this number to start carrier review.\",\n    },\n    {\n      label: \"Carrier approved\",\n      done: ready,\n      pendingHint: hasCampaign ? \"Review typically takes days to a few weeks — this flips automatically.\" : undefined,\n    },\n  ];\n\n  return (\n    <div className={cn(\"rounded-lg border p-4\", className)}>\n      <div className=\"flex items-baseline justify-between gap-2\">\n        <p className=\"text-sm font-medium tabular-nums\">{formatUS(number.phone_number)}</p>\n        <span\n          className={cn(\n            \"rounded-full px-2 py-0.5 text-[11px] font-medium\",\n            ready ? \"bg-primary/10 text-primary\" : \"bg-muted text-muted-foreground\",\n          )}\n        >\n          {ready ? \"Ready to text\" : \"Texting pending\"}\n        </span>\n      </div>\n      <ul className=\"mt-3 space-y-2\">\n        {checks.map((check) => (\n          <li key={check.label} className=\"flex items-start gap-2 text-sm\">\n            {check.done ? (\n              <Check className=\"mt-0.5 h-4 w-4 shrink-0 text-primary\" />\n            ) : (\n              <Clock className=\"mt-0.5 h-4 w-4 shrink-0 text-muted-foreground\" />\n            )}\n            <span>\n              <span className={cn(!check.done && \"text-muted-foreground\")}>{check.label}</span>\n              {!check.done && check.pendingHint ? (\n                <span className=\"block text-xs text-muted-foreground\">{check.pendingHint}</span>\n              ) : null}\n            </span>\n          </li>\n        ))}\n      </ul>\n      <p className=\"mt-3 border-t pt-2.5 text-xs text-muted-foreground\">\n        {ready\n          ? \"Outbound and inbound texting are fully enabled on this number.\"\n          : \"Calls and inbound texts work now; outbound texting unlocks at carrier approval.\"}\n      </p>\n    </div>\n  );\n}\n\nfunction formatUS(e164: string): string {\n  const m = /^\\+1(\\d{3})(\\d{3})(\\d{4})$/.exec(e164);\n  return m ? `(${m[1]}) ${m[2]}-${m[3]}` : e164;\n}\n",
+      "type": "registry:component",
+      "target": "components/handset/texting-readiness.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

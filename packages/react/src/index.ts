@@ -18,6 +18,27 @@ export {
   type UseCallTranscriptResult,
 } from "./use-call-transcript";
 export {
+  useAvailableNumbers,
+  useBuyNumber,
+  usePhoneNumber,
+  type NumberSearchParams,
+  type UseAvailableNumbersResult,
+  type BuyNumberInput,
+  type UseBuyNumberResult,
+  type UsePhoneNumberOptions,
+  type UsePhoneNumberResult,
+} from "./use-numbers";
+export { usePortIn, type UsePortInOptions, type UsePortInResult } from "./use-port-in";
+export { useUsage, type UseUsageOptions, type UseUsageResult } from "./use-usage";
+export type {
+  AvailableNumber,
+  PhoneNumber,
+  PortIn,
+  PortInStatus,
+  UsageKind,
+  UsageSummary,
+} from "./number-types";
+export {
   ACTIVE_CALL_STATUSES,
   isCallActive,
   type Call,

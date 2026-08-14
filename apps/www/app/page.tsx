@@ -17,6 +17,11 @@ const COMPONENTS = [
   { name: "click-to-call-button", title: "Click-to-call", desc: "Rings the agent, bridges the customer, narrates the call live." },
   { name: "call-log", title: "Call log", desc: "Call history with outcomes and expandable transcripts." },
   { name: "call-transcript", title: "Call transcript", desc: "Speaker-labeled transcripts — one-shot or following a live call." },
+  { name: "opt-in-form", title: "Opt-in form", desc: "Consent UI whose exact shape passed a real carrier review." },
+  { name: "number-picker", title: "Number picker", desc: "Area-code search and one-click claim for self-serve onboarding." },
+  { name: "port-status", title: "Port status", desc: "'Where's my number?' as a stepper, rejections made fixable." },
+  { name: "texting-readiness", title: "Texting readiness", desc: "The 10DLC pipeline as a checklist instead of a mystery." },
+  { name: "usage-meter", title: "Usage meter", desc: "Period usage with comparative bars — show or re-bill customers." },
   { name: "next-routes", title: "next-routes", desc: "Server proxy route — your API key never reaches the browser." },
 ];
 

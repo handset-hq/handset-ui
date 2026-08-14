@@ -42,6 +42,13 @@ const ALLOWED: { method: string; match: (path: string) => boolean }[] = [
   // Consider validating body.connect_to against the signed-in agent's own
   // number before forwarding, so users can't ring arbitrary phones.
   { method: "POST", match: (p) => p === "calls" },
+  { method: "GET", match: (p) => p === "phone_numbers/available" },
+  { method: "GET", match: (p) => /^phone_numbers\/[\w]+$/.test(p) },
+  // Buying a number bills your account — gate this behind an admin check
+  // in resolveTenantId (or remove it) if end users shouldn't self-serve.
+  { method: "POST", match: (p) => p === "phone_numbers" },
+  { method: "GET", match: (p) => /^port_ins\/[\w]+$/.test(p) },
+  { method: "GET", match: (p) => p === "usage" },
 ];
 
 async function proxy(req: NextRequest, params: Promise<{ handset: string[] }>) {
