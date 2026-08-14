@@ -14,8 +14,8 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0(react@19.2.8)
       '@handset/webrtc':
-        specifier: workspace:*
-        version: link:../../packages/webrtc
+        specifier: ^0.1.1
+        version: 0.1.1(react@19.2.8)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -397,6 +397,14 @@ packages:
     resolution: {integrity: sha512-aGFKe/vxDwqxccR4l9UkmM+PxrYeioUc2YIL4NhnG9BD3q5MXQqlVUhZBIUIqJKgJUnz+gC8yr6cR4uNZAkqOA==}
     peerDependencies:
       react: '>=18'
+
+  '@handset/webrtc@0.1.1':
+    resolution: {integrity: sha512-UMQyKXtFAqNa+SLSCX3Resqu2Dxc6jKHEyp++ofeTNbs7HYw0LVzlwaZvWAwfM+PhfxvOiShcRBfQk6qeYk6fg==}
+    peerDependencies:
+      react: '>=18'
+    peerDependenciesMeta:
+      react:
+        optional: true
 
   '@hono/node-server@2.1.1':
     resolution: {integrity: sha512-ELuehkj5VCBdgEw9zs+ivkKwyzzUCSQuE96YmiPvn1ECBoZCczbFXJLeEGMTYjphP6gydh4pHMqEYPVMYUVgQg==}
@@ -2814,6 +2822,12 @@ snapshots:
 
   '@handset/react@0.1.0(react@19.2.8)':
     dependencies:
+      react: 19.2.8
+
+  '@handset/webrtc@0.1.1(react@19.2.8)':
+    dependencies:
+      '@telnyx/webrtc': 2.27.9
+    optionalDependencies:
       react: 19.2.8
 
   '@hono/node-server@2.1.1(hono@4.13.2)':
