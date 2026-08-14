@@ -13,6 +13,10 @@ const COMPONENTS = [
   { name: "inbox", title: "Inbox", desc: "Conversation list with previews, relative times, STOP badges, infinite scroll." },
   { name: "thread", title: "Thread", desc: "Message history with delivery states, opt-out handling, wired composer." },
   { name: "composer", title: "Composer", desc: "Draft box with live SMS segment counting and unicode detection." },
+  { name: "voicemail-player", title: "Voicemail player", desc: "Playback with expiry-safe URLs, durations, and transcripts." },
+  { name: "click-to-call-button", title: "Click-to-call", desc: "Rings the agent, bridges the customer, narrates the call live." },
+  { name: "call-log", title: "Call log", desc: "Call history with outcomes and expandable transcripts." },
+  { name: "call-transcript", title: "Call transcript", desc: "Speaker-labeled transcripts — one-shot or following a live call." },
   { name: "next-routes", title: "next-routes", desc: "Server proxy route — your API key never reaches the browser." },
 ];
 

@@ -61,6 +61,63 @@
       ]
     },
     {
+      "name": "voicemail-player",
+      "type": "registry:component",
+      "title": "Voicemail player",
+      "description": "Voicemail list and player: audio playback with expiry-safe URL refresh, durations, and transcripts.",
+      "dependencies": ["@handset/react", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/new-york/voicemail-player/voicemail-player.tsx",
+          "type": "registry:component",
+          "target": "components/handset/voicemail-player.tsx"
+        }
+      ]
+    },
+    {
+      "name": "click-to-call-button",
+      "type": "registry:component",
+      "title": "Click-to-call button",
+      "description": "A call button that dials the agent, bridges the customer, and narrates the call's lifecycle live.",
+      "dependencies": ["@handset/react", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/new-york/click-to-call-button/click-to-call-button.tsx",
+          "type": "registry:component",
+          "target": "components/handset/click-to-call-button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "call-transcript",
+      "type": "registry:component",
+      "title": "Call transcript",
+      "description": "Speaker-labeled call transcript view — one-shot for finished calls or polling for live ones.",
+      "dependencies": ["@handset/react"],
+      "files": [
+        {
+          "path": "registry/new-york/call-transcript/call-transcript.tsx",
+          "type": "registry:component",
+          "target": "components/handset/call-transcript.tsx"
+        }
+      ]
+    },
+    {
+      "name": "call-log",
+      "type": "registry:component",
+      "title": "Call log",
+      "description": "Call history with direction icons, outcomes, durations, and expandable transcripts.",
+      "dependencies": ["@handset/react", "lucide-react"],
+      "registryDependencies": ["@handset/call-transcript"],
+      "files": [
+        {
+          "path": "registry/new-york/call-log/call-log.tsx",
+          "type": "registry:component",
+          "target": "components/handset/call-log.tsx"
+        }
+      ]
+    },
+    {
       "name": "next-routes",
       "type": "registry:file",
       "title": "Next.js proxy routes",

@@ -36,6 +36,12 @@ const ALLOWED: { method: string; match: (path: string) => boolean }[] = [
   { method: "POST", match: (p) => p === "messages" },
   { method: "GET", match: (p) => p === "voicemails" },
   { method: "GET", match: (p) => /^voicemails\/[\w]+$/.test(p) },
+  { method: "GET", match: (p) => p === "calls" },
+  { method: "GET", match: (p) => /^calls\/[\w]+$/.test(p) },
+  { method: "GET", match: (p) => /^calls\/[\w]+\/transcript$/.test(p) },
+  // Consider validating body.connect_to against the signed-in agent's own
+  // number before forwarding, so users can't ring arbitrary phones.
+  { method: "POST", match: (p) => p === "calls" },
 ];
 
 async function proxy(req: NextRequest, params: Promise<{ handset: string[] }>) {

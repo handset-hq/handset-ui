@@ -20,6 +20,10 @@ export const DOCS_NAV = [
       { title: "Inbox", href: "/docs/components/inbox" },
       { title: "Thread", href: "/docs/components/thread" },
       { title: "Composer", href: "/docs/components/composer" },
+      { title: "Voicemail player", href: "/docs/components/voicemail-player" },
+      { title: "Click-to-call", href: "/docs/components/click-to-call-button" },
+      { title: "Call log", href: "/docs/components/call-log" },
+      { title: "Call transcript", href: "/docs/components/call-transcript" },
       { title: "Next.js routes", href: "/docs/components/next-routes" },
     ],
   },
@@ -29,6 +33,7 @@ export const DOCS_NAV = [
       { title: "useConversations", href: "/docs/hooks/use-conversations" },
       { title: "useThread", href: "/docs/hooks/use-thread" },
       { title: "useComposer", href: "/docs/hooks/use-composer" },
+      { title: "Voice hooks", href: "/docs/hooks/voice" },
     ],
   },
 ] as const;
