@@ -11,8 +11,8 @@ importers:
   apps/www:
     dependencies:
       '@handset/react':
-        specifier: workspace:*
-        version: link:../../packages/react
+        specifier: ^0.1.0
+        version: 0.1.0(react@19.2.8)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -370,6 +370,11 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@handset/react@0.1.0':
+    resolution: {integrity: sha512-aGFKe/vxDwqxccR4l9UkmM+PxrYeioUc2YIL4NhnG9BD3q5MXQqlVUhZBIUIqJKgJUnz+gC8yr6cR4uNZAkqOA==}
+    peerDependencies:
+      react: '>=18'
 
   '@hono/node-server@2.1.1':
     resolution: {integrity: sha512-ELuehkj5VCBdgEw9zs+ivkKwyzzUCSQuE96YmiPvn1ECBoZCczbFXJLeEGMTYjphP6gydh4pHMqEYPVMYUVgQg==}
@@ -2758,6 +2763,10 @@ snapshots:
 
   '@esbuild/win32-x64@0.27.7':
     optional: true
+
+  '@handset/react@0.1.0(react@19.2.8)':
+    dependencies:
+      react: 19.2.8
 
   '@hono/node-server@2.1.1(hono@4.13.2)':
     dependencies:

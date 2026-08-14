@@ -8,7 +8,7 @@
     "registry:build": "shadcn build"
   },
   "dependencies": {
-    "@handset/react": "workspace:*",
+    "@handset/react": "^0.1.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.542.0",
     "next": "^15.4.0",
