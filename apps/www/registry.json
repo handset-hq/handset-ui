@@ -187,6 +187,36 @@
       ]
     },
     {
+      "name": "contact-timeline",
+      "type": "registry:block",
+      "title": "Contact timeline",
+      "description": "One customer's entire relationship in one scroll — messages, calls with transcripts, and voicemails merged newest-first. Built for CRM contact panels.",
+      "dependencies": ["@handset/react", "lucide-react"],
+      "registryDependencies": ["@handset/voicemail-player", "@handset/call-transcript", "@handset/composer"],
+      "files": [
+        {
+          "path": "registry/new-york/contact-timeline/contact-timeline.tsx",
+          "type": "registry:component",
+          "target": "components/handset/contact-timeline.tsx"
+        }
+      ]
+    },
+    {
+      "name": "phone-system",
+      "type": "registry:block",
+      "title": "Phone system",
+      "description": "Texting, call history, and voicemail behind three tabs — the whole phone system as one component.",
+      "dependencies": ["@handset/react", "lucide-react"],
+      "registryDependencies": ["@handset/messaging", "@handset/call-log", "@handset/voicemail-player"],
+      "files": [
+        {
+          "path": "registry/new-york/phone-system/phone-system.tsx",
+          "type": "registry:component",
+          "target": "components/handset/phone-system.tsx"
+        }
+      ]
+    },
+    {
       "name": "next-routes",
       "type": "registry:file",
       "title": "Next.js proxy routes",

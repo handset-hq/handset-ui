@@ -14,9 +14,16 @@ export const DOCS_NAV = [
     ],
   },
   {
+    label: "Blocks",
+    items: [
+      { title: "Phone system", href: "/docs/components/phone-system" },
+      { title: "Contact timeline", href: "/docs/components/contact-timeline" },
+      { title: "Messaging", href: "/docs/components/messaging" },
+    ],
+  },
+  {
     label: "Components",
     items: [
-      { title: "Messaging", href: "/docs/components/messaging" },
       { title: "Inbox", href: "/docs/components/inbox" },
       { title: "Thread", href: "/docs/components/thread" },
       { title: "Composer", href: "/docs/components/composer" },

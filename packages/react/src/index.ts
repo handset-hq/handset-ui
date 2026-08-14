@@ -29,6 +29,12 @@ export {
   type UsePhoneNumberResult,
 } from "./use-numbers";
 export { usePortIn, type UsePortInOptions, type UsePortInResult } from "./use-port-in";
+export {
+  useContactTimeline,
+  type TimelineEvent,
+  type UseContactTimelineOptions,
+  type UseContactTimelineResult,
+} from "./use-contact-timeline";
 export { useUsage, type UseUsageOptions, type UseUsageResult } from "./use-usage";
 export type {
   AvailableNumber,

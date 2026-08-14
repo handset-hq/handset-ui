@@ -9,6 +9,8 @@ const REGISTRY_ADD = "npx shadcn@latest registry add @handset=https://ui.handset
 const INSTALL = "npx shadcn@latest add @handset/messaging @handset/next-routes";
 
 const COMPONENTS = [
+  { name: "phone-system", title: "Phone system", desc: "Texting, calls, and voicemail behind three tabs — one import." },
+  { name: "contact-timeline", title: "Contact timeline", desc: "One customer's messages, calls, and voicemails in one scroll." },
   { name: "messaging", title: "Messaging", desc: "Two-pane texting surface — inbox plus thread, responsive to mobile." },
   { name: "inbox", title: "Inbox", desc: "Conversation list with previews, relative times, STOP badges, infinite scroll." },
   { name: "thread", title: "Thread", desc: "Message history with delivery states, opt-out handling, wired composer." },
