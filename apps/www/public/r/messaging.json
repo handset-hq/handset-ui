@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "messaging",
+  "title": "Messaging",
+  "description": "Complete two-pane texting surface: inbox plus active thread, responsive down to mobile.",
+  "registryDependencies": [
+    "@handset/inbox",
+    "@handset/thread"
+  ],
+  "files": [
+    {
+      "path": "registry/new-york/messaging/messaging.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { cn } from \"@/lib/utils\";\nimport { Inbox } from \"@/components/handset/inbox\";\nimport { Thread } from \"@/components/handset/thread\";\n\nexport interface MessagingProps {\n  className?: string;\n  /** Scope to one tenant. Usually unnecessary — your proxy routes scope server-side. */\n  tenantId?: string;\n}\n\n/**\n * A complete two-pane texting surface: inbox on the left, active thread on\n * the right. Drop it on a page and you have messaging in your product.\n */\nexport function Messaging({ className, tenantId }: MessagingProps) {\n  const [selectedId, setSelectedId] = React.useState<string | null>(null);\n\n  return (\n    <div className={cn(\"grid h-full min-h-0 grid-cols-1 overflow-hidden rounded-lg border md:grid-cols-[280px_1fr]\", className)}>\n      <Inbox\n        tenantId={tenantId}\n        selectedId={selectedId}\n        onSelect={(c) => setSelectedId(c.id)}\n        className={cn(\"border-b md:border-b-0 md:border-r\", selectedId && \"hidden md:block\")}\n      />\n      <div className={cn(\"min-h-0\", !selectedId && \"hidden md:block\")}>\n        {selectedId ? (\n          <div className=\"flex h-full min-h-0 flex-col\">\n            <button\n              type=\"button\"\n              onClick={() => setSelectedId(null)}\n              className=\"border-b px-4 py-2 text-left text-xs text-muted-foreground md:hidden\"\n            >\n              ← All conversations\n            </button>\n            <Thread conversationId={selectedId} className=\"min-h-0 flex-1\" />\n          </div>\n        ) : (\n          <Thread conversationId={null} />\n        )}\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:component",
+      "target": "components/handset/messaging.tsx"
+    }
+  ],
+  "type": "registry:block"
+}

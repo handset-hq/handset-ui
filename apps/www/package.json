@@ -1,0 +1,27 @@
+{
+  "name": "www",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "pnpm registry:build && next build",
+    "start": "next start",
+    "registry:build": "shadcn build"
+  },
+  "dependencies": {
+    "@handset/react": "workspace:*",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.542.0",
+    "next": "^15.4.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^3.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "shadcn": "^3.0.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.7.0"
+  }
+}

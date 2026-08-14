@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "composer",
+  "title": "Composer",
+  "description": "Message composer with live SMS segment counting and unicode detection.",
+  "dependencies": [
+    "@handset/react",
+    "lucide-react"
+  ],
+  "files": [
+    {
+      "path": "registry/new-york/composer/composer.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { useComposer, type UseComposerOptions } from \"@handset/react\";\nimport { SendHorizontal } from \"lucide-react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface ComposerProps extends UseComposerOptions {\n  placeholder?: string;\n  className?: string;\n}\n\n/**\n * Message composer with live SMS segment counting. Pair it with\n * `useThread(...).send`, or hand it any send function.\n */\nexport function Composer({ send, disabled, placeholder = \"Type a message…\", className }: ComposerProps) {\n  const composer = useComposer({ send, disabled });\n  const textareaRef = React.useRef<HTMLTextAreaElement>(null);\n\n  const onKeyDown = (e: React.KeyboardEvent) => {\n    if (e.key === \"Enter\" && !e.shiftKey) {\n      e.preventDefault();\n      void composer.submit();\n    }\n  };\n\n  const { segmentInfo } = composer;\n\n  return (\n    <div className={cn(\"border-t bg-background p-3\", className)}>\n      {composer.error ? (\n        <p className=\"mb-2 text-xs text-destructive\" role=\"alert\">\n          Couldn&apos;t send: {composer.error.message}\n        </p>\n      ) : null}\n      <div className=\"flex items-end gap-2\">\n        <textarea\n          ref={textareaRef}\n          value={composer.body}\n          onChange={(e) => composer.setBody(e.target.value)}\n          onKeyDown={onKeyDown}\n          placeholder={disabled ? \"This contact has opted out\" : placeholder}\n          disabled={disabled}\n          rows={1}\n          className={cn(\n            \"max-h-40 min-h-10 flex-1 resize-none rounded-md border bg-transparent px-3 py-2 text-sm\",\n            \"placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring\",\n            \"disabled:cursor-not-allowed disabled:opacity-50\",\n          )}\n        />\n        <button\n          type=\"button\"\n          onClick={() => void composer.submit()}\n          disabled={!composer.canSend}\n          aria-label=\"Send message\"\n          className={cn(\n            \"inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground\",\n            \"transition-opacity hover:opacity-90 disabled:pointer-events-none disabled:opacity-40\",\n          )}\n        >\n          <SendHorizontal className=\"h-4 w-4\" />\n        </button>\n      </div>\n      {composer.body.length > 0 ? (\n        <p className=\"mt-1.5 text-right text-[11px] tabular-nums text-muted-foreground\">\n          {segmentInfo.segments} segment{segmentInfo.segments === 1 ? \"\" : \"s\"}\n          {\" · \"}\n          {segmentInfo.remaining} left\n          {segmentInfo.encoding === \"ucs2\" ? \" · unicode\" : \"\"}\n        </p>\n      ) : null}\n    </div>\n  );\n}\n",
+      "type": "registry:component",
+      "target": "components/handset/composer.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

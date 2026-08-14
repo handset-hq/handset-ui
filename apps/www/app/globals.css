@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.24 0.03 262);
+  --muted: oklch(0.965 0.005 262);
+  --muted-foreground: oklch(0.55 0.02 262);
+  --border: oklch(0.91 0.008 262);
+  --ring: oklch(0.55 0.19 277);
+  --primary: oklch(0.55 0.19 277);
+  --primary-foreground: oklch(0.99 0 0);
+  --destructive: oklch(0.55 0.2 25);
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: oklch(0.17 0.02 262);
+  --foreground: oklch(0.94 0.005 262);
+  --muted: oklch(0.24 0.02 262);
+  --muted-foreground: oklch(0.65 0.015 262);
+  --border: oklch(0.29 0.02 262);
+  --ring: oklch(0.65 0.17 277);
+  --primary: oklch(0.65 0.17 277);
+  --primary-foreground: oklch(0.99 0 0);
+  --destructive: oklch(0.65 0.18 25);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-destructive: var(--destructive);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+  }
+}

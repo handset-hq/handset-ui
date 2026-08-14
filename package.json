@@ -1,0 +1,10 @@
+{
+  "name": "handset-ui",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "pnpm --filter www dev",
+    "registry:build": "pnpm --filter www registry:build"
+  }
+}

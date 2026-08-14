@@ -1,0 +1,78 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "handset",
+  "homepage": "https://ui.handset.dev",
+  "items": [
+    {
+      "name": "composer",
+      "type": "registry:component",
+      "title": "Composer",
+      "description": "Message composer with live SMS segment counting and unicode detection.",
+      "dependencies": ["@handset/react", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/new-york/composer/composer.tsx",
+          "type": "registry:component",
+          "target": "components/handset/composer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "thread",
+      "type": "registry:component",
+      "title": "Thread",
+      "description": "A full SMS conversation: polled history, delivery states, opt-out awareness, and a wired composer.",
+      "dependencies": ["@handset/react", "lucide-react"],
+      "registryDependencies": ["@handset/composer"],
+      "files": [
+        {
+          "path": "registry/new-york/thread/thread.tsx",
+          "type": "registry:component",
+          "target": "components/handset/thread.tsx"
+        }
+      ]
+    },
+    {
+      "name": "inbox",
+      "type": "registry:component",
+      "title": "Inbox",
+      "description": "Polling conversation list with previews, relative times, STOP badges, and infinite scroll.",
+      "dependencies": ["@handset/react"],
+      "files": [
+        {
+          "path": "registry/new-york/inbox/inbox.tsx",
+          "type": "registry:component",
+          "target": "components/handset/inbox.tsx"
+        }
+      ]
+    },
+    {
+      "name": "messaging",
+      "type": "registry:block",
+      "title": "Messaging",
+      "description": "Complete two-pane texting surface: inbox plus active thread, responsive down to mobile.",
+      "registryDependencies": ["@handset/inbox", "@handset/thread"],
+      "files": [
+        {
+          "path": "registry/new-york/messaging/messaging.tsx",
+          "type": "registry:component",
+          "target": "components/handset/messaging.tsx"
+        }
+      ]
+    },
+    {
+      "name": "next-routes",
+      "type": "registry:file",
+      "title": "Next.js proxy routes",
+      "description": "Server route that proxies Handset UI components to the Handset API. Your API key stays server-side; tenant scoping hooks into your session.",
+      "envVars": { "HANDSET_API_KEY": "" },
+      "files": [
+        {
+          "path": "registry/new-york/next-routes/route.ts",
+          "type": "registry:file",
+          "target": "app/api/handset/[...handset]/route.ts"
+        }
+      ]
+    }
+  ]
+}
