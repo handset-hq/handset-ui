@@ -17,6 +17,8 @@ export interface SoftphoneCall {
   readonly muted: boolean;
   /** Set once the call goes active. */
   readonly startedAt: Date | null;
+  /** Why the call ended (carrier cause like CALL_REJECTED), once ended. */
+  readonly endedReason: string | null;
   /** Answer an inbound ringing call. */
   answer(): Promise<void>;
   /** Decline an inbound ringing call without answering. */

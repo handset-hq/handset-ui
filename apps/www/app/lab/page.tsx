@@ -30,7 +30,13 @@ export default function LabPage() {
       append(`status: ${s}${err ? ` (${err.message})` : ""}`);
     });
     sp.on("incoming", (c) => append(`INCOMING from ${c.remoteNumber}`));
-    sp.on("call", (c) => append(`call ${c.direction} → ${c.state}${c.muted ? " (muted)" : ""}`));
+    sp.on("call", (c) =>
+      append(
+        `call ${c.direction} → ${c.state}${c.muted ? " (muted)" : ""}${
+          c.state === "ended" && c.endedReason ? ` — cause: ${c.endedReason}` : ""
+        }`,
+      ),
+    );
     setPhone(sp);
     void sp.connect().catch((e) => append(`connect failed: ${e.message}`));
   };

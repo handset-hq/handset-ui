@@ -1,4 +1,5 @@
 import { TelnyxRTC } from "@telnyx/webrtc";
+import { GeneratedRing } from "./ringtone";
 import {
   Emitter,
   type CallState,
@@ -45,6 +46,7 @@ class TelnyxSoftphone implements Softphone {
   private readonly emitter = new Emitter<SoftphoneEvents>();
   private client: TelnyxRTC | null = null;
   private audioEl: HTMLAudioElement | null = null;
+  private readonly ring = new GeneratedRing();
 
   constructor(options: SoftphoneOptions) {
     this.options = options;
@@ -91,6 +93,7 @@ class TelnyxSoftphone implements Softphone {
   }
 
   disconnect(): void {
+    this.ring.stop();
     this.activeCall?.detach();
     this.activeCall = null;
     this.client?.disconnect();
@@ -125,10 +128,23 @@ class TelnyxSoftphone implements Softphone {
     }
     const state = STATE_MAP[raw.state ?? ""] ?? "connecting";
     if (raw.direction === "inbound" && state === "ringing") {
-      const remote = raw.options?.remoteCallerNumber ?? raw.options?.callerNumber ?? "unknown";
+      const remote = normalizeE164(
+        raw.options?.remoteCallerNumber ?? raw.options?.callerNumber ?? "unknown",
+      );
       const call = new CallHandle(raw, "inbound", remote, () => this.clearIfActive(call));
       this.activeCall = call;
       call.subscribe((c) => this.emitter.emit("call", c));
+      // Audible ring until the call leaves "ringing" (answer/reject/miss).
+      // A custom ringtoneUrl is handled by the underlying SDK instead.
+      if (!this.options.ringtoneUrl) {
+        this.ring.start();
+        const stop = call.onChange((c) => {
+          if (c.state !== "ringing") {
+            this.ring.stop();
+            stop();
+          }
+        });
+      }
       this.emitter.emit("incoming", call);
     }
   }
@@ -167,6 +183,7 @@ class CallHandle implements SoftphoneCall {
   state: CallState;
   muted = false;
   startedAt: Date | null = null;
+  endedReason: string | null = null;
 
   private raw: TelnyxCall;
   private readonly listeners = new Set<(call: SoftphoneCall) => void>();
@@ -194,7 +211,11 @@ class CallHandle implements SoftphoneCall {
     if (next === this.state) return;
     this.state = next;
     if (next === "active" && !this.startedAt) this.startedAt = new Date();
-    if (next === "ended") this.onEnded();
+    if (next === "ended") {
+      const cause = raw.cause ?? raw.causeCode;
+      this.endedReason = cause != null ? String(cause) : null;
+      this.onEnded();
+    }
     this.notify();
   }
 
@@ -255,6 +276,8 @@ class CallHandle implements SoftphoneCall {
 interface TelnyxCall {
   id?: string;
   state?: string;
+  cause?: string;
+  causeCode?: string | number;
   direction?: string;
   options?: { remoteCallerNumber?: string; callerNumber?: string };
   answer(): void;
@@ -267,4 +290,14 @@ interface TelnyxCall {
 interface TelnyxNotification {
   type: string;
   call?: TelnyxCall;
+}
+
+/** "14154136287" → "+14154136287"; leaves formatted/unknown values alone. */
+function normalizeE164(raw: string): string {
+  if (!raw || raw.startsWith("+")) return raw;
+  const digits = raw.replace(/\D/g, "");
+  if (digits.length === 11 && digits.startsWith("1")) return "+" + digits;
+  if (digits.length === 10) return "+1" + digits;
+  if (digits.length >= 7 && digits === raw) return "+" + digits;
+  return raw;
 }

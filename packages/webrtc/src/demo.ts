@@ -108,6 +108,7 @@ class DemoCall implements SoftphoneCall {
   state: CallState;
   muted = false;
   startedAt: Date | null = null;
+  endedReason: string | null = null;
 
   private readonly listeners = new Set<(call: SoftphoneCall) => void>();
   private readonly onEnded: () => void;
