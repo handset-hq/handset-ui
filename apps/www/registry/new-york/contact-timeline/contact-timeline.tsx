@@ -151,6 +151,12 @@ function CallRow({ call }: { call: Call }) {
       <p className="mt-0.5 text-[11px] text-muted-foreground">{formatWhen(call.started_at)}</p>
       {open ? (
         <div className="mt-2 rounded-lg border bg-muted/20 p-3">
+          {call.summary ? (
+            <div className="mb-3">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-primary">Summary</p>
+              <p className="mt-1 text-sm leading-relaxed">{call.summary}</p>
+            </div>
+          ) : null}
           <CallTranscriptView callId={call.id} />
         </div>
       ) : null}

@@ -17,9 +17,13 @@ export function ComposerDemo() {
       created_at: new Date().toISOString(),
     };
   };
+  // In a real app you'd upload the user's file to your own storage and
+  // return its public URL; the demo just picks a sample image.
+  const pickAttachment = async () => "/demo-mms.png";
+
   return (
     <div className="rounded-lg border">
-      <Composer send={send} className="border-t-0" />
+      <Composer send={send} onPickAttachment={pickAttachment} className="border-t-0" />
     </div>
   );
 }

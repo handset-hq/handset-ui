@@ -15,7 +15,8 @@ export default function ComposerDocs() {
 
       <ComposerDemo />
       <p className="mt-2 text-xs text-muted-foreground">
-        Type past 160 characters — or paste an emoji — and watch the counter.
+        Type past 160 characters — or paste an emoji — and watch the counter. The paperclip attaches media
+        (the demo picks a sample image); with an attachment the footer flips from segments to MMS.
       </p>
 
       <DocSection title="Installation">
@@ -30,7 +31,17 @@ export default function ComposerDocs() {
 <Composer send={thread.send} disabled={conversation?.opted_out} />
 
 // Anywhere else: hand it any (input) => Promise<Message>
-<Composer send={({ body }) => sendCampaignMessage(body)} />`}
+<Composer send={({ body }) => sendCampaignMessage(body)} />
+
+// MMS: wire the paperclip to your own uploader — return a public URL.
+<Composer
+  send={thread.send}
+  onPickAttachment={async () => {
+    const file = await pickFile();               // your file picker
+    const { url } = await uploadToMyStorage(file); // your storage
+    return url;                                   // becomes media_urls[i]
+  }}
+/>`}
         />
         <p>
           The segment counter runs the real GSM-7/UCS-2 math from <InlineCode>@handset/react</InlineCode>&apos;s{" "}
@@ -45,6 +56,7 @@ export default function ComposerDocs() {
             { name: "send", type: "(input: SendInput) => Promise<Message>", description: "Where drafts go. Usually useThread(...).send." },
             { name: "disabled", type: "boolean", default: "false", description: "Disables input and send (e.g. opted-out contact)." },
             { name: "placeholder", type: "string", default: '"Type a message…"', description: "Textarea placeholder." },
+            { name: "onPickAttachment", type: "() => Promise<string | string[] | null>", description: "Enables the MMS paperclip. Upload the file to your storage, return its public https:// URL(s); return null to cancel. Attachments are capped at 10 and sent as media_urls." },
             { name: "className", type: "string", description: "Merged onto the wrapper." },
           ]}
         />

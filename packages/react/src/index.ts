@@ -2,7 +2,7 @@ export { HandsetProvider, useHandsetClient, type HandsetProviderProps } from "./
 export { HandsetClient, HandsetRequestError, type HandsetClientOptions } from "./client";
 export { useConversations, type UseConversationsOptions, type UseConversationsResult } from "./use-conversations";
 export { useThread, type UseThreadOptions, type UseThreadResult, type SendInput } from "./use-thread";
-export { useComposer, type UseComposerOptions, type UseComposerResult } from "./use-composer";
+export { useComposer, MAX_ATTACHMENTS, type UseComposerOptions, type UseComposerResult } from "./use-composer";
 export { countSegments, type SegmentInfo } from "./segments";
 export { useVoicemails, type UseVoicemailsOptions, type UseVoicemailsResult } from "./use-voicemails";
 export { useCalls, type UseCallsOptions, type UseCallsResult } from "./use-calls";

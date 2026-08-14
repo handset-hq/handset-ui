@@ -63,6 +63,12 @@ export function CallLog({ className, formatNumber = formatUS, ...options }: Call
             </button>
             {open ? (
               <div className="border-t bg-muted/20 px-4 py-3">
+                {call.summary ? (
+                  <div className="mb-3">
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-primary">Summary</p>
+                    <p className="mt-1 text-sm leading-relaxed">{call.summary}</p>
+                  </div>
+                ) : null}
                 <CallTranscriptView callId={call.id} />
               </div>
             ) : null}

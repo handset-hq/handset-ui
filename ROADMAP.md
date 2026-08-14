@@ -10,8 +10,11 @@ if your use case should reorder this list.
 optimistic send), `messaging` (two-pane block), `opt-in-form`,
 `texting-readiness`.
 
-**Voice** — `click-to-call-button`, `call-log`, `call-transcript` (live-poll),
-`voicemail-player`.
+**Voice** — `click-to-call-button`, `call-log` (expanded rows show the AI
+call summary + transcript), `call-transcript` (live-poll), `voicemail-player`.
+
+**MMS** — `composer` attachments via `onPickAttachment` (chips, per-message
+MMS footer, ≤10 URLs), image bubbles in `thread`, `media_urls` end to end.
 
 **WebRTC softphone** — `dialer`, `call-hud`, `incoming-call-toast`,
 `softphone` (browser calling via `@handset/webrtc`, with generated ringtone).
@@ -28,11 +31,6 @@ conversations, calls, voicemails), `phone-system` (3-tab mega-block),
 
 ## Next
 
-- **Call summaries in `call-log`** — the API now returns an AI `summary` on
-  transcribed calls and a `call.summary` webhook; surface it in the expanded
-  call row and `contact-timeline`.
-- **MMS in `composer` and `thread`** — attachment picker, image bubbles,
-  `media_urls` passthrough (API support just landed).
 - **`use-websocket` upgrade path** — the hooks are polling-first by design;
   a drop-in live transport once the API exposes one.
 - **Framework proxies beyond Next.js** — `remix-routes`, `express-routes`

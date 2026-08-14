@@ -21,6 +21,12 @@ export interface Call {
   duration_seconds?: number | null;
   recording_id?: string | null;
   voicemail_id?: string | null;
+  /**
+   * AI recap of a transcribed call — why they called, what was discussed,
+   * follow-ups. Null until generated (~15s after a `transcribe: true` call
+   * completes; a `call.summary` webhook fires when it's ready).
+   */
+  summary?: string | null;
   started_at: string;
   ended_at?: string | null;
   events?: { type: string; at: string; detail?: Record<string, unknown> | null }[];

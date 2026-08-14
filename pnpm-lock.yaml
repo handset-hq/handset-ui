@@ -11,8 +11,8 @@ importers:
   apps/www:
     dependencies:
       '@handset/react':
-        specifier: ^0.1.0
-        version: 0.1.0(react@19.2.8)
+        specifier: ^0.2.0
+        version: link:../../packages/react
       '@handset/webrtc':
         specifier: ^0.1.1
         version: 0.1.1(react@19.2.8)
@@ -392,11 +392,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
-
-  '@handset/react@0.1.0':
-    resolution: {integrity: sha512-aGFKe/vxDwqxccR4l9UkmM+PxrYeioUc2YIL4NhnG9BD3q5MXQqlVUhZBIUIqJKgJUnz+gC8yr6cR4uNZAkqOA==}
-    peerDependencies:
-      react: '>=18'
 
   '@handset/webrtc@0.1.1':
     resolution: {integrity: sha512-UMQyKXtFAqNa+SLSCX3Resqu2Dxc6jKHEyp++ofeTNbs7HYw0LVzlwaZvWAwfM+PhfxvOiShcRBfQk6qeYk6fg==}
@@ -2819,10 +2814,6 @@ snapshots:
 
   '@esbuild/win32-x64@0.27.7':
     optional: true
-
-  '@handset/react@0.1.0(react@19.2.8)':
-    dependencies:
-      react: 19.2.8
 
   '@handset/webrtc@0.1.1(react@19.2.8)':
     dependencies:

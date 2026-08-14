@@ -13,6 +13,7 @@ interface DemoMessage {
   from: string;
   to: string;
   body: string | null;
+  media_urls?: string[];
   status: string;
   segments: number;
   created_at: string;
@@ -55,6 +56,7 @@ const seedMessages: DemoMessage[] = [
   msg("cnv_demo_maria", "inbound", "C", 30, "received"),
   msg("cnv_demo_maria", "outbound", "You're confirmed for 2pm. We'll text you when we're on the way.", 28, "delivered"),
   msg("cnv_demo_maria", "inbound", "Perfect, see you at 2!", 2, "received"),
+  { ...msg("cnv_demo_maria", "inbound", "Here's what the leak looks like right now", 1, "received"), media_urls: ["/demo-mms.png"] },
   msg("cnv_demo_jordan", "outbound", "Hi Jordan, your invoice #1042 for $180 is ready. Pay online: example.com/i/1042", 60 * 3, "delivered"),
   msg("cnv_demo_jordan", "inbound", "Can we move my appointment to Friday?", 49, "received"),
   msg("cnv_demo_sam", "outbound", "Your order is ready for pickup!", 60 * 27, "delivered"),
@@ -259,6 +261,8 @@ interface DemoCall {
   duration_seconds?: number | null;
   started_at: string;
   ended_at?: string | null;
+  /** AI recap — arrives ~15s after a transcribed call completes. */
+  summary?: string | null;
   /** For simulated live calls: advance status by wall-clock elapsed time. */
   live?: boolean;
 }
@@ -286,7 +290,7 @@ const voicemails = [
 ];
 
 const calls: DemoCall[] = [
-  { id: "call_demo_1", direction: "outbound", from: "num_demo", to: "+14155550132", connect_to: "+14155550199", status: "completed", duration_seconds: 154, started_at: minutesAgo(31), ended_at: minutesAgo(28) },
+  { id: "call_demo_1", direction: "outbound", from: "num_demo", to: "+14155550132", connect_to: "+14155550199", status: "completed", duration_seconds: 154, started_at: minutesAgo(31), ended_at: minutesAgo(28), summary: "The agent called Maria back about parking spot 12, which is still available. They agreed to add it to her lease at $40/month starting in September." },
   { id: "call_demo_vm", direction: "inbound", from: "+14155550163", to: "num_demo", status: "voicemail", duration_seconds: 23, started_at: minutesAgo(39), ended_at: minutesAgo(38) },
   { id: "call_demo_2", direction: "inbound", from: "+14155550188", to: "num_demo", status: "missed", started_at: minutesAgo(60 * 4), ended_at: minutesAgo(60 * 4) },
 ];
@@ -298,13 +302,19 @@ function materializeCall(call: DemoCall) {
   let status = "dialing";
   let duration: number | null = null;
   let ended: string | null = null;
+  let summary: string | null = null;
   if (elapsed >= 17) {
     status = "completed";
     duration = Math.round(elapsed - 5);
     ended = new Date(Date.parse(call.started_at) + 17_000).toISOString();
+    // The summary "generates" ~15s after the call ends, like production.
+    if (elapsed >= 32) {
+      summary =
+        "The demo agent greeted the caller to showcase click-to-call; the caller confirmed the bridge and live transcription worked, and ended the call convinced.";
+    }
   } else if (elapsed >= 5) status = "in_progress";
   else if (elapsed >= 2) status = "ringing";
-  return { ...call, status, duration_seconds: duration, ended_at: ended, live: undefined };
+  return { ...call, status, duration_seconds: duration, ended_at: ended, summary, live: undefined };
 }
 
 const TRANSCRIPTS: Record<string, { speaker: string; text: string; afterSeconds: number }[]> = {
@@ -413,7 +423,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ handset: s
   if (handset[0] !== "messages") {
     return NextResponse.json({ error: { code: "not_found", message: "Unknown route" } }, { status: 404 });
   }
-  const body = (await req.json()) as { to: string; body?: string };
+  const body = (await req.json()) as { to: string; body?: string; media_urls?: string[] };
   const convo = conversations.find((c) => c.external_number === body.to);
   if (convo?.opted_out) {
     return NextResponse.json(
@@ -429,6 +439,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ handset: s
     from: "num_demo",
     to: body.to,
     body: body.body ?? null,
+    media_urls: body.media_urls,
     status: "delivered",
     segments: 1,
     created_at: new Date().toISOString(),
@@ -436,7 +447,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ handset: s
   messages.push(sent);
   if (convo) {
     convo.last_activity_at = sent.created_at;
-    convo.last_message_preview = sent.body ?? "";
+    convo.last_message_preview = sent.body ?? (sent.media_urls?.length ? "📷 Attachment" : "");
   }
   // The demo texts back.
   setTimeout(() => {
@@ -447,7 +458,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ handset: s
       direction: "inbound",
       from: body.to,
       to: "num_demo",
-      body: "Got it, thanks! (demo auto-reply)",
+      body: sent.media_urls?.length ? "Got the photo, thanks! (demo auto-reply)" : "Got it, thanks! (demo auto-reply)",
       status: "received",
       segments: 1,
       created_at: new Date().toISOString(),

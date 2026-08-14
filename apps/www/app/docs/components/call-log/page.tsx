@@ -10,7 +10,7 @@ export default function CallLogDocs() {
     <article>
       <DocHeader
         title="Call log"
-        lead="Call history the way a phone shows it: direction icons, outcomes, durations — and each row expands into the call's transcript."
+        lead="Call history the way a phone shows it: direction icons, outcomes, durations — and each row expands into the call's AI summary and transcript."
       />
 
       <Preview height={300}>
