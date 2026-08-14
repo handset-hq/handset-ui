@@ -24,6 +24,7 @@ export default function Home() {
           Handset <span className="text-primary">UI</span>
         </span>
         <nav className="flex items-center gap-5 text-sm text-muted-foreground">
+          <a className="transition-colors hover:text-foreground" href="/docs">Docs</a>
           <a className="transition-colors hover:text-foreground" href="https://github.com/handset-hq/handset-ui">GitHub</a>
           <a className="transition-colors hover:text-foreground" href="https://docs.handset.dev">API docs</a>
           <a className="transition-colors hover:text-foreground" href="https://handset.dev">handset.dev</a>
@@ -62,10 +63,10 @@ export default function Home() {
         <h2 className="text-lg font-semibold tracking-tight">Components</h2>
         <div className="mt-4 grid gap-px overflow-hidden rounded-lg border bg-border sm:grid-cols-2">
           {COMPONENTS.map((c) => (
-            <div key={c.name} className="bg-background p-5">
+            <a key={c.name} href={`/docs/components/${c.name}`} className="bg-background p-5 transition-colors hover:bg-muted/40">
               <p className="font-mono text-sm text-primary">@handset/{c.name}</p>
               <p className="mt-1 text-sm text-muted-foreground">{c.desc}</p>
-            </div>
+            </a>
           ))}
           <div className="bg-background p-5">
             <p className="font-mono text-sm text-muted-foreground">@handset/react</p>
