@@ -286,6 +286,34 @@
           "target": "app/api/handset/[...handset]/route.ts"
         }
       ]
+    },
+    {
+      "name": "express-routes",
+      "type": "registry:file",
+      "title": "Express proxy routes",
+      "description": "Express router that proxies Handset UI components to the Handset API. Your API key stays server-side; tenant scoping hooks into your session. Mount at /api/handset.",
+      "envVars": { "HANDSET_API_KEY": "" },
+      "files": [
+        {
+          "path": "registry/new-york/express-routes/handset-routes.ts",
+          "type": "registry:file",
+          "target": "server/handset-routes.ts"
+        }
+      ]
+    },
+    {
+      "name": "remix-routes",
+      "type": "registry:file",
+      "title": "Remix / React Router proxy routes",
+      "description": "Resource route that proxies Handset UI components to the Handset API — works on Remix v2 and React Router 7. Your API key stays server-side; tenant scoping hooks into your session.",
+      "envVars": { "HANDSET_API_KEY": "" },
+      "files": [
+        {
+          "path": "registry/new-york/remix-routes/api.handset.$.ts",
+          "type": "registry:file",
+          "target": "app/routes/api.handset.$.ts"
+        }
+      ]
     }
   ]
 }

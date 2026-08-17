@@ -42,6 +42,8 @@ export const DOCS_NAV = [
       { title: "Call HUD", href: "/docs/components/call-hud" },
       { title: "Incoming call toast", href: "/docs/components/incoming-call-toast" },
       { title: "Next.js routes", href: "/docs/components/next-routes" },
+      { title: "Express routes", href: "/docs/components/express-routes" },
+      { title: "Remix routes", href: "/docs/components/remix-routes" },
     ],
   },
   {

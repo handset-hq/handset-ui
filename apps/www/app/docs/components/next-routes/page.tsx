@@ -59,9 +59,10 @@ export default function NextRoutesDocs() {
 HANDSET_API_URL=                 # optional override, defaults to https://api.handset.dev/v1`}
         />
         <p>
-          Not on Next.js? The file is ~100 lines of fetch with no framework magic — port it to Express, Hono, or
-          Rails in a few minutes. The components only care that <InlineCode>baseUrl</InlineCode> speaks the same
-          paths.
+          Not on Next.js? <InlineCode>@handset/express-routes</InlineCode> and{" "}
+          <InlineCode>@handset/remix-routes</InlineCode> are the same proxy for those frameworks. Anything else
+          (Hono, Rails…) is a few minutes of porting — the file is ~100 lines of fetch with no framework magic,
+          and the components only care that <InlineCode>baseUrl</InlineCode> speaks the same paths.
         </p>
       </DocSection>
     </article>

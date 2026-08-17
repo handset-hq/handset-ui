@@ -23,7 +23,9 @@ MMS footer, ≤10 URLs), image bubbles in `thread`, `media_urls` end to end.
 
 **Blocks & plumbing** — `contact-timeline` (per-contact merge of
 conversations, calls, voicemails), `phone-system` (3-tab mega-block),
-`next-routes` (the server proxy that keeps your API key off the client).
+`next-routes` / `express-routes` / `remix-routes` (the server proxy that
+keeps your API key off the client, for Next.js, Express, and
+Remix / React Router 7).
 
 **Packages** — [`@handset/react`](https://www.npmjs.com/package/@handset/react)
 (headless hooks) and [`@handset/webrtc`](https://www.npmjs.com/package/@handset/webrtc)
@@ -33,8 +35,8 @@ conversations, calls, voicemails), `phone-system` (3-tab mega-block),
 
 - **`use-websocket` upgrade path** — the hooks are polling-first by design;
   a drop-in live transport once the API exposes one.
-- **Framework proxies beyond Next.js** — `remix-routes`, `express-routes`
-  registry items mirroring `next-routes`.
+- **In-call keypad** — a `DTMFPad` surface on the softphone now that the
+  API speaks DTMF (send digits + gather).
 
 ## Later / exploring
 
