@@ -4,6 +4,7 @@ import * as React from "react";
 import { HandsetProvider } from "@handset/react";
 import { Check, Copy } from "lucide-react";
 import { Messaging } from "@/components/handset/messaging";
+import { Wordmark } from "@/components/wordmark";
 
 const REGISTRY_ADD = "npx shadcn@latest registry add @handset=https://ui.handset.dev/r/{name}.json";
 const INSTALL = "npx shadcn@latest add @handset/messaging @handset/next-routes";
@@ -32,8 +33,9 @@ export default function Home() {
   return (
     <main className="mx-auto max-w-5xl px-6 pb-24">
       <header className="flex items-center justify-between py-6">
-        <span className="text-sm font-semibold tracking-tight">
-          Handset <span className="text-primary">UI</span>
+        <span className="flex items-baseline gap-1.5">
+          <Wordmark className="h-[13px] w-auto text-foreground" />
+          <span className="text-sm font-semibold tracking-tight text-primary">UI</span>
         </span>
         <nav className="flex items-center gap-5 text-sm text-muted-foreground">
           <a className="transition-colors hover:text-foreground" href="/docs">Docs</a>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { DocsSidebar } from "@/components/docs/sidebar";
+import { Wordmark } from "@/components/wordmark";
 
 export const metadata: Metadata = {
   title: { default: "Docs — Handset UI", template: "%s — Handset UI" },
@@ -11,8 +12,9 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
     <div className="mx-auto max-w-6xl px-6">
       <header className="flex items-center justify-between border-b py-4">
         <div className="flex items-baseline gap-6">
-          <Link href="/" className="text-sm font-semibold tracking-tight">
-            Handset <span className="text-primary">UI</span>
+          <Link href="/" className="flex items-baseline gap-1.5">
+            <Wordmark className="h-[13px] w-auto text-foreground" />
+            <span className="text-sm font-semibold tracking-tight text-primary">UI</span>
           </Link>
           <Link href="/docs" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
             Docs
