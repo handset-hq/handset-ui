@@ -7,6 +7,7 @@ import { SoftphonePanel } from "@/components/handset/softphone";
 import { Dialer } from "@/components/handset/dialer";
 import { CallHUD } from "@/components/handset/call-hud";
 import { IncomingCallToast } from "@/components/handset/incoming-call-toast";
+import { DTMFPad } from "@/components/handset/dtmf-pad";
 
 function useDemoPhone(): DemoSoftphoneHandle {
   const [phone] = React.useState(() => createDemoSoftphone({ answerAfterSeconds: 2.5 }));
@@ -116,8 +117,40 @@ export function CallHUDDemo() {
       >
         {placing ? "Connecting…" : "Place a demo call"}
       </button>
-      <CallHUD softphone={phone} draggable className="w-80" />
-      <p className="text-xs text-muted-foreground">The bar is draggable — grab it anywhere but the buttons.</p>
+      <CallHUD softphone={phone} draggable keypad className="w-80" />
+      <p className="text-xs text-muted-foreground">
+        The bar is draggable — grab it anywhere but the buttons. The grid button pops the keypad.
+      </p>
+    </div>
+  );
+}
+
+export function DTMFPadDemo() {
+  const phone = useDemoPhone();
+  const [placing, setPlacing] = React.useState(false);
+  const place = async () => {
+    setPlacing(true);
+    try {
+      if (phone.status !== "ready") await phone.connect();
+      if (!phone.activeCall) await phone.dial({ to: "+14155550142" });
+    } finally {
+      setPlacing(false);
+    }
+  };
+  return (
+    <div className="space-y-3">
+      <button
+        type="button"
+        disabled={placing}
+        onClick={() => void place()}
+        className="inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground disabled:opacity-60"
+      >
+        {placing ? "Connecting…" : "Place a demo call"}
+      </button>
+      <DTMFPad softphone={phone} />
+      <p className="text-xs text-muted-foreground">
+        Once the call is active, keys play the real dual-tone frequencies locally.
+      </p>
     </div>
   );
 }

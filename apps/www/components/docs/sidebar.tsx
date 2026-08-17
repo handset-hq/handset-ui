@@ -40,6 +40,7 @@ export const DOCS_NAV = [
       { title: "Usage meter", href: "/docs/components/usage-meter" },
       { title: "Dialer", href: "/docs/components/dialer" },
       { title: "Call HUD", href: "/docs/components/call-hud" },
+      { title: "DTMF pad", href: "/docs/components/dtmf-pad" },
       { title: "Incoming call toast", href: "/docs/components/incoming-call-toast" },
       { title: "Next.js routes", href: "/docs/components/next-routes" },
       { title: "Express routes", href: "/docs/components/express-routes" },

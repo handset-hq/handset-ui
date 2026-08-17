@@ -231,11 +231,26 @@
       ]
     },
     {
+      "name": "dtmf-pad",
+      "type": "registry:component",
+      "title": "DTMF pad",
+      "description": "The in-call keypad: sends tones on the active call for extensions, PINs, and press-1 menus, with real dual-tone audio feedback.",
+      "dependencies": ["@handset/webrtc"],
+      "files": [
+        {
+          "path": "registry/new-york/dtmf-pad/dtmf-pad.tsx",
+          "type": "registry:component",
+          "target": "components/handset/dtmf-pad.tsx"
+        }
+      ]
+    },
+    {
       "name": "call-hud",
       "type": "registry:component",
       "title": "Call HUD",
-      "description": "The in-call bar: who you're talking to, a live timer, mute, hang up. Renders nothing while quiet.",
+      "description": "The in-call bar: who you're talking to, a live timer, mute, hang up — with an optional pop-out keypad. Renders nothing while quiet.",
       "dependencies": ["@handset/webrtc", "lucide-react"],
+      "registryDependencies": ["@handset/dtmf-pad"],
       "files": [
         {
           "path": "registry/new-york/call-hud/call-hud.tsx",

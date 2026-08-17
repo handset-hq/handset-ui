@@ -16,8 +16,10 @@ call summary + transcript), `call-transcript` (live-poll), `voicemail-player`.
 **MMS** — `composer` attachments via `onPickAttachment` (chips, per-message
 MMS footer, ≤10 URLs), image bubbles in `thread`, `media_urls` end to end.
 
-**WebRTC softphone** — `dialer`, `call-hud`, `incoming-call-toast`,
-`softphone` (browser calling via `@handset/webrtc`, with generated ringtone).
+**WebRTC softphone** — `dialer`, `call-hud` (with pop-out keypad),
+`dtmf-pad` (in-call tones with real dual-tone feedback),
+`incoming-call-toast`, `softphone` (browser calling via `@handset/webrtc`,
+with generated ringtone).
 
 **Numbers & compliance** — `number-picker`, `port-status`, `usage-meter`.
 
@@ -35,8 +37,8 @@ Remix / React Router 7).
 
 - **`use-websocket` upgrade path** — the hooks are polling-first by design;
   a drop-in live transport once the API exposes one.
-- **In-call keypad** — a `DTMFPad` surface on the softphone now that the
-  API speaks DTMF (send digits + gather).
+- **Gather-aware surfaces** — components that visualize `call.gather`
+  results (confirmation outcomes in `call-log`, timeline entries).
 
 ## Later / exploring
 

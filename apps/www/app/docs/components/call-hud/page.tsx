@@ -47,6 +47,7 @@ export default function CallHUDDocs() {
             { name: "softphone", type: "Softphone", description: "The softphone instance." },
             { name: "formatNumber", type: "(e164: string) => string", default: "US formatter", description: "Display formatting for the remote number." },
             { name: "draggable", type: "boolean", default: "false", description: "Let the user drag the bar around the screen (grab anywhere but the buttons). Position resets when the call ends." },
+            { name: "keypad", type: "boolean", default: "false", description: "Show a keypad toggle that pops a DTMF pad under the bar — extensions, PINs, press-1 menus." },
             { name: "className", type: "string", description: "Merged onto the bar — position it here." },
           ]}
         />
