@@ -5,6 +5,7 @@ import { useHandsetClient } from "./provider";
 import { usePoll } from "./use-poll";
 import type { Page } from "./types";
 import type { Voicemail } from "./voice-types";
+import { relaxedPoll, useRealtimeFamily } from "./use-realtime";
 
 export interface UseVoicemailsOptions {
   tenantId?: string;
@@ -61,7 +62,8 @@ export function useVoicemails(options: UseVoicemailsOptions = {}): UseVoicemails
     }
   }, [client, tenantId, limit]);
 
-  usePoll(() => void fetchFirstPage(), pollMs, [fetchFirstPage]);
+  const rt = useRealtimeFamily("voicemails");
+  usePoll(() => void fetchFirstPage(), relaxedPoll(pollMs, rt.connected), [fetchFirstPage, rt.version]);
 
   const loadMore = useCallback(async () => {
     if (!cursorRef.current || loadingMoreRef.current) return;

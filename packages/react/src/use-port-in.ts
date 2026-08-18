@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { useHandsetClient } from "./provider";
 import { usePoll } from "./use-poll";
 import type { PortIn } from "./number-types";
+import { relaxedPoll, useRealtimeFamily } from "./use-realtime";
 
 export interface UsePortInOptions {
   /** Poll interval in ms. Default 30000 — ports move slowly. 0 fetches once. */
@@ -38,7 +39,8 @@ export function usePortIn(portInId: string | null, options: UsePortInOptions = {
     }
   }, [client, portInId]);
 
-  usePoll(() => void fetchPortIn(), portInId ? pollMs : 0, [fetchPortIn]);
+  const rt = useRealtimeFamily("ports");
+  usePoll(() => void fetchPortIn(), portInId ? relaxedPoll(pollMs, rt.connected) : 0, [fetchPortIn, rt.version]);
 
   return { portIn, isLoading, error, refresh: fetchPortIn };
 }

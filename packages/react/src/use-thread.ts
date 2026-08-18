@@ -4,6 +4,7 @@ import { useCallback, useRef, useState } from "react";
 import { useHandsetClient } from "./provider";
 import { usePoll } from "./use-poll";
 import type { Conversation, Message, OutgoingMessage, Page } from "./types";
+import { relaxedPoll, useRealtimeFamily } from "./use-realtime";
 
 export interface UseThreadOptions {
   /** Poll interval in ms. 0 disables polling. Default 3000. */
@@ -77,7 +78,8 @@ export function useThread(conversationId: string | null, options: UseThreadOptio
     }
   }, [client, conversationId, limit]);
 
-  usePoll(() => void fetchThread(), conversationId ? pollMs : 0, [fetchThread]);
+  const rt = useRealtimeFamily("messages");
+  usePoll(() => void fetchThread(), conversationId ? relaxedPoll(pollMs, rt.connected) : 0, [fetchThread, rt.version]);
 
   const send = useCallback(
     async (input: SendInput): Promise<Message> => {

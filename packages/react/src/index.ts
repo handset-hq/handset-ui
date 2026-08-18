@@ -61,3 +61,12 @@ export type {
   Page,
   ApiError,
 } from "./types";
+export {
+  RealtimeManager,
+  useHandsetEvents,
+  useRealtimeFamily,
+  relaxedPoll,
+  familiesFor,
+  type RealtimeEnvelope,
+  type RealtimeFamily,
+} from "./use-realtime";

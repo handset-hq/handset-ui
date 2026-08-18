@@ -5,6 +5,7 @@ import { useHandsetClient } from "./provider";
 import { usePoll } from "./use-poll";
 import type { Conversation, Message, Page } from "./types";
 import type { Call, Voicemail } from "./voice-types";
+import { relaxedPoll, useRealtimeFamily } from "./use-realtime";
 
 export type TimelineEvent =
   | { type: "message"; at: string; message: Message }
@@ -90,7 +91,10 @@ export function useContactTimeline(
     }
   }, [client, externalNumber, tenantId, limit]);
 
-  usePoll(() => void fetchTimeline(), externalNumber ? pollMs : 0, [fetchTimeline]);
+  const rtM = useRealtimeFamily("messages");
+  const rtC = useRealtimeFamily("calls");
+  const rtV = useRealtimeFamily("voicemails");
+  usePoll(() => void fetchTimeline(), externalNumber ? relaxedPoll(pollMs, rtM.connected) : 0, [fetchTimeline, rtM.version, rtC.version, rtV.version]);
 
   return { events, conversation, isLoading, error, refresh: fetchTimeline };
 }

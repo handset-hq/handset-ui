@@ -33,14 +33,17 @@ conversations, calls, voicemails), `phone-system` (3-tab mega-block),
 keeps your API key off the client, for Next.js, Express, and
 Remix / React Router 7).
 
+**Realtime** — `<HandsetProvider realtime>` connects the browser to the
+event stream (`wss://media.handset.dev/v1/events`, short-lived tokens via
+your proxy): hooks refetch the instant events happen and polling drops to
+a 60s safety net. `useHandsetEvents` exposes the raw stream.
+
 **Packages** — [`@handset/react`](https://www.npmjs.com/package/@handset/react)
 (headless hooks) and [`@handset/webrtc`](https://www.npmjs.com/package/@handset/webrtc)
 (carrier-agnostic softphone core).
 
 ## Next
 
-- **`use-websocket` upgrade path** — the hooks are polling-first by design;
-  a drop-in live transport once the API exposes one.
 
 ## Later / exploring
 

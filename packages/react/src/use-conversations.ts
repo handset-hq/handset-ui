@@ -4,6 +4,7 @@ import { useCallback, useRef, useState } from "react";
 import { useHandsetClient } from "./provider";
 import { usePoll } from "./use-poll";
 import type { Conversation, Page } from "./types";
+import { relaxedPoll, useRealtimeFamily } from "./use-realtime";
 
 export interface UseConversationsOptions {
   /** Scope to one tenant. Usually unnecessary — your proxy routes scope server-side. */
@@ -59,7 +60,8 @@ export function useConversations(options: UseConversationsOptions = {}): UseConv
     }
   }, [client, tenantId, limit]);
 
-  usePoll(() => void fetchFirstPage(), pollMs, [fetchFirstPage]);
+  const rt = useRealtimeFamily("messages");
+  usePoll(() => void fetchFirstPage(), relaxedPoll(pollMs, rt.connected), [fetchFirstPage, rt.version]);
 
   const loadMore = useCallback(async () => {
     if (!cursorRef.current || loadingMoreRef.current) return;

@@ -5,6 +5,7 @@ import { useHandsetClient } from "./provider";
 import { usePoll } from "./use-poll";
 import type { Page } from "./types";
 import type { Call } from "./voice-types";
+import { relaxedPoll, useRealtimeFamily } from "./use-realtime";
 
 export interface UseCallsOptions {
   tenantId?: string;
@@ -58,7 +59,8 @@ export function useCalls(options: UseCallsOptions = {}): UseCallsResult {
     }
   }, [client, tenantId, phoneNumberId, limit]);
 
-  usePoll(() => void fetchFirstPage(), pollMs, [fetchFirstPage]);
+  const rt = useRealtimeFamily("calls");
+  usePoll(() => void fetchFirstPage(), relaxedPoll(pollMs, rt.connected), [fetchFirstPage, rt.version]);
 
   const loadMore = useCallback(async () => {
     if (!cursorRef.current || loadingMoreRef.current) return;

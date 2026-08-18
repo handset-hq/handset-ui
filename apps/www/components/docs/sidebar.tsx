@@ -11,6 +11,7 @@ export const DOCS_NAV = [
       { title: "Introduction", href: "/docs" },
       { title: "Installation", href: "/docs/installation" },
       { title: "Architecture", href: "/docs/architecture" },
+      { title: "Realtime", href: "/docs/realtime" },
       { title: "Softphone setup", href: "/docs/softphone-setup" },
     ],
   },

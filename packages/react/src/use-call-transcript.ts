@@ -5,6 +5,7 @@ import { useHandsetClient } from "./provider";
 import { usePoll } from "./use-poll";
 import { HandsetRequestError } from "./client";
 import type { CallTranscript } from "./voice-types";
+import { relaxedPoll, useRealtimeFamily } from "./use-realtime";
 
 export interface UseCallTranscriptOptions {
   /**
@@ -54,7 +55,8 @@ export function useCallTranscript(
     }
   }, [client, callId]);
 
-  usePoll(() => void fetchTranscript(), callId ? pollMs : 0, [fetchTranscript]);
+  const rt = useRealtimeFamily("calls");
+  usePoll(() => void fetchTranscript(), callId ? relaxedPoll(pollMs, rt.connected) : 0, [fetchTranscript, rt.version]);
 
   return { transcript, isEmpty, isLoading, error, refresh: fetchTranscript };
 }
