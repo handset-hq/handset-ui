@@ -79,9 +79,12 @@ export function AgentAssistPanel({ remoteNumber, autoTranscribe = true, classNam
     };
   }, [client, call]);
 
-  // Auto-start transcription exactly once per found call.
+  // Auto-start transcription exactly once per call — but only once it's
+  // in_progress: the API rejects transcription on a still-ringing leg, and
+  // the once-per-call guard must not burn on that 409. The follow poll
+  // brings the status flip that re-runs this effect.
   React.useEffect(() => {
-    if (!call || !autoTranscribe || startedRef.current === call.id || !isCallActive(call.status)) return;
+    if (!call || !autoTranscribe || startedRef.current === call.id || call.status !== "in_progress") return;
     startedRef.current = call.id;
     void client.request("POST", `/calls/${call.id}/transcription`).catch(() => {
       // The panel still shows keypad events and the summary; the transcript
