@@ -10,7 +10,7 @@ export default function CallLogDocs() {
     <article>
       <DocHeader
         title="Call log"
-        lead="Call history the way a phone shows it: direction icons, outcomes, durations — and each row expands into the call's AI summary and transcript."
+        lead="Call history the way a phone shows it: direction icons, outcomes, durations — and each row expands into the call's AI summary, keypad interactions, and transcript."
       />
 
       <Preview height={300}>
@@ -18,12 +18,27 @@ export default function CallLogDocs() {
           <CallLog />
         </div>
       </Preview>
-      <p className="mt-2 text-xs text-muted-foreground">Expand the completed call to read its transcript.</p>
+      <p className="mt-2 text-xs text-muted-foreground">
+        Expand the completed call to read its transcript — and the Brightside Dental call to see a gather result.
+      </p>
 
       <DocSection title="Installation">
         <InstallBlock item="call-log" />
         <p>
-          Installs <InlineCode>call-transcript</InlineCode> as a dependency for the expandable rows.
+          Installs <InlineCode>call-transcript</InlineCode> and <InlineCode>call-keypad</InlineCode> as dependencies
+          for the expandable rows.
+        </p>
+      </DocSection>
+
+      <DocSection title="Keypad interactions">
+        <p>
+          When a call used the keypad — a{" "}
+          <InlineCode>POST /v1/calls/{"{id}"}/gather</InlineCode> asked &ldquo;press 1 to confirm&rdquo;, the caller
+          pressed digits mid-call, or your app sent DTMF to navigate a phone tree — the expansion shows the whole
+          exchange: the spoken prompt, the digits collected (or why none were:{" "}
+          <InlineCode>timeout</InlineCode> / <InlineCode>hangup</InlineCode>), loose keypresses by party, and digits
+          sent to the far end. Calls without keypad activity show nothing extra. The detail comes from the call&apos;s
+          event timeline (<InlineCode>GET /v1/calls/{"{id}"}</InlineCode>), fetched once when a row expands.
         </p>
       </DocSection>
 

@@ -4,6 +4,7 @@ import * as React from "react";
 import { useCalls, type Call, type UseCallsOptions } from "@handset/react";
 import { ChevronDown, PhoneIncoming, PhoneMissed, PhoneOutgoing, Voicemail } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { CallKeypadView } from "@/components/handset/call-keypad";
 import { CallTranscriptView } from "@/components/handset/call-transcript";
 
 export interface CallLogProps extends UseCallsOptions {
@@ -69,6 +70,7 @@ export function CallLog({ className, formatNumber = formatUS, ...options }: Call
                     <p className="mt-1 text-sm leading-relaxed">{call.summary}</p>
                   </div>
                 ) : null}
+                <CallKeypadView callId={call.id} className="mb-3" />
                 <CallTranscriptView callId={call.id} />
               </div>
             ) : null}

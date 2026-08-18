@@ -8,7 +8,10 @@
       "type": "registry:component",
       "title": "Composer",
       "description": "Message composer with live SMS segment counting and unicode detection.",
-      "dependencies": ["@handset/react", "lucide-react"],
+      "dependencies": [
+        "@handset/react",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/new-york/composer/composer.tsx",
@@ -22,8 +25,13 @@
       "type": "registry:component",
       "title": "Thread",
       "description": "A full SMS conversation: polled history, delivery states, opt-out awareness, and a wired composer.",
-      "dependencies": ["@handset/react", "lucide-react"],
-      "registryDependencies": ["@handset/composer"],
+      "dependencies": [
+        "@handset/react",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@handset/composer"
+      ],
       "files": [
         {
           "path": "registry/new-york/thread/thread.tsx",
@@ -37,7 +45,9 @@
       "type": "registry:component",
       "title": "Inbox",
       "description": "Polling conversation list with previews, relative times, STOP badges, and infinite scroll.",
-      "dependencies": ["@handset/react"],
+      "dependencies": [
+        "@handset/react"
+      ],
       "files": [
         {
           "path": "registry/new-york/inbox/inbox.tsx",
@@ -51,7 +61,10 @@
       "type": "registry:block",
       "title": "Messaging",
       "description": "Complete two-pane texting surface: inbox plus active thread, responsive down to mobile.",
-      "registryDependencies": ["@handset/inbox", "@handset/thread"],
+      "registryDependencies": [
+        "@handset/inbox",
+        "@handset/thread"
+      ],
       "files": [
         {
           "path": "registry/new-york/messaging/messaging.tsx",
@@ -65,7 +78,10 @@
       "type": "registry:component",
       "title": "Voicemail player",
       "description": "Voicemail list and player: audio playback with expiry-safe URL refresh, durations, and transcripts.",
-      "dependencies": ["@handset/react", "lucide-react"],
+      "dependencies": [
+        "@handset/react",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/new-york/voicemail-player/voicemail-player.tsx",
@@ -79,7 +95,10 @@
       "type": "registry:component",
       "title": "Click-to-call button",
       "description": "A call button that dials the agent, bridges the customer, and narrates the call's lifecycle live.",
-      "dependencies": ["@handset/react", "lucide-react"],
+      "dependencies": [
+        "@handset/react",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/new-york/click-to-call-button/click-to-call-button.tsx",
@@ -92,8 +111,10 @@
       "name": "call-transcript",
       "type": "registry:component",
       "title": "Call transcript",
-      "description": "Speaker-labeled call transcript view — one-shot for finished calls or polling for live ones.",
-      "dependencies": ["@handset/react"],
+      "description": "Speaker-labeled call transcript view \u2014 one-shot for finished calls or polling for live ones.",
+      "dependencies": [
+        "@handset/react"
+      ],
       "files": [
         {
           "path": "registry/new-york/call-transcript/call-transcript.tsx",
@@ -103,12 +124,34 @@
       ]
     },
     {
+      "name": "call-keypad",
+      "type": "registry:component",
+      "title": "Call keypad view",
+      "description": "A call's keypad story \u2014 gather prompts with the digits the caller answered, loose keypresses, and digits sent to the far end. Renders nothing for calls without keypad activity.",
+      "dependencies": [
+        "@handset/react"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/call-keypad/call-keypad.tsx",
+          "type": "registry:component",
+          "target": "components/handset/call-keypad.tsx"
+        }
+      ]
+    },
+    {
       "name": "call-log",
       "type": "registry:component",
       "title": "Call log",
       "description": "Call history with direction icons, outcomes, durations, and expandable transcripts.",
-      "dependencies": ["@handset/react", "lucide-react"],
-      "registryDependencies": ["@handset/call-transcript"],
+      "dependencies": [
+        "@handset/react",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@handset/call-keypad",
+        "@handset/call-transcript"
+      ],
       "files": [
         {
           "path": "registry/new-york/call-log/call-log.tsx",
@@ -121,7 +164,7 @@
       "name": "opt-in-form",
       "type": "registry:component",
       "title": "Opt-in form",
-      "description": "A carrier-compliant SMS opt-in form whose shape survived a real TCR review — optional consent checkbox, full CTIA disclosure, explicit not-enrolled path.",
+      "description": "A carrier-compliant SMS opt-in form whose shape survived a real TCR review \u2014 optional consent checkbox, full CTIA disclosure, explicit not-enrolled path.",
       "files": [
         {
           "path": "registry/new-york/opt-in-form/opt-in-form.tsx",
@@ -134,8 +177,11 @@
       "name": "number-picker",
       "type": "registry:component",
       "title": "Number picker",
-      "description": "Area-code search and one-click purchase — the self-serve 'pick your business number' onboarding step.",
-      "dependencies": ["@handset/react", "lucide-react"],
+      "description": "Area-code search and one-click purchase \u2014 the self-serve 'pick your business number' onboarding step.",
+      "dependencies": [
+        "@handset/react",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/new-york/number-picker/number-picker.tsx",
@@ -148,8 +194,11 @@
       "name": "port-status",
       "type": "registry:component",
       "title": "Port status",
-      "description": "A port-in request as a stepper — draft, review, confirmed date, done — with carrier rejections surfaced as fixable callouts.",
-      "dependencies": ["@handset/react", "lucide-react"],
+      "description": "A port-in request as a stepper \u2014 draft, review, confirmed date, done \u2014 with carrier rejections surfaced as fixable callouts.",
+      "dependencies": [
+        "@handset/react",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/new-york/port-status/port-status.tsx",
@@ -163,7 +212,10 @@
       "type": "registry:component",
       "title": "Texting readiness",
       "description": "A number's path to messaging as a checklist: active, campaign attached, carrier approved. 10DLC without the mystery.",
-      "dependencies": ["@handset/react", "lucide-react"],
+      "dependencies": [
+        "@handset/react",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/new-york/texting-readiness/texting-readiness.tsx",
@@ -176,8 +228,10 @@
       "name": "usage-meter",
       "type": "registry:component",
       "title": "Usage meter",
-      "description": "A tenant's period usage as labeled quantities with comparative bars — show or re-bill customers their own traffic.",
-      "dependencies": ["@handset/react"],
+      "description": "A tenant's period usage as labeled quantities with comparative bars \u2014 show or re-bill customers their own traffic.",
+      "dependencies": [
+        "@handset/react"
+      ],
       "files": [
         {
           "path": "registry/new-york/usage-meter/usage-meter.tsx",
@@ -190,9 +244,17 @@
       "name": "contact-timeline",
       "type": "registry:block",
       "title": "Contact timeline",
-      "description": "One customer's entire relationship in one scroll — messages, calls with transcripts, and voicemails merged newest-first. Built for CRM contact panels.",
-      "dependencies": ["@handset/react", "lucide-react"],
-      "registryDependencies": ["@handset/voicemail-player", "@handset/call-transcript", "@handset/composer"],
+      "description": "One customer's entire relationship in one scroll \u2014 messages, calls with transcripts, and voicemails merged newest-first. Built for CRM contact panels.",
+      "dependencies": [
+        "@handset/react",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@handset/call-keypad",
+        "@handset/voicemail-player",
+        "@handset/call-transcript",
+        "@handset/composer"
+      ],
       "files": [
         {
           "path": "registry/new-york/contact-timeline/contact-timeline.tsx",
@@ -205,9 +267,16 @@
       "name": "phone-system",
       "type": "registry:block",
       "title": "Phone system",
-      "description": "Texting, call history, and voicemail behind three tabs — the whole phone system as one component.",
-      "dependencies": ["@handset/react", "lucide-react"],
-      "registryDependencies": ["@handset/messaging", "@handset/call-log", "@handset/voicemail-player"],
+      "description": "Texting, call history, and voicemail behind three tabs \u2014 the whole phone system as one component.",
+      "dependencies": [
+        "@handset/react",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@handset/messaging",
+        "@handset/call-log",
+        "@handset/voicemail-player"
+      ],
       "files": [
         {
           "path": "registry/new-york/phone-system/phone-system.tsx",
@@ -221,7 +290,10 @@
       "type": "registry:component",
       "title": "Dialer",
       "description": "A phone keypad: type or tap a number and call from the browser. In-call keys send DTMF.",
-      "dependencies": ["@handset/webrtc", "lucide-react"],
+      "dependencies": [
+        "@handset/webrtc",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/new-york/dialer/dialer.tsx",
@@ -235,7 +307,9 @@
       "type": "registry:component",
       "title": "DTMF pad",
       "description": "The in-call keypad: sends tones on the active call for extensions, PINs, and press-1 menus, with real dual-tone audio feedback.",
-      "dependencies": ["@handset/webrtc"],
+      "dependencies": [
+        "@handset/webrtc"
+      ],
       "files": [
         {
           "path": "registry/new-york/dtmf-pad/dtmf-pad.tsx",
@@ -248,9 +322,14 @@
       "name": "call-hud",
       "type": "registry:component",
       "title": "Call HUD",
-      "description": "The in-call bar: who you're talking to, a live timer, mute, hang up — with an optional pop-out keypad. Renders nothing while quiet.",
-      "dependencies": ["@handset/webrtc", "lucide-react"],
-      "registryDependencies": ["@handset/dtmf-pad"],
+      "description": "The in-call bar: who you're talking to, a live timer, mute, hang up \u2014 with an optional pop-out keypad. Renders nothing while quiet.",
+      "dependencies": [
+        "@handset/webrtc",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@handset/dtmf-pad"
+      ],
       "files": [
         {
           "path": "registry/new-york/call-hud/call-hud.tsx",
@@ -263,8 +342,11 @@
       "name": "incoming-call-toast",
       "type": "registry:component",
       "title": "Incoming call toast",
-      "description": "Rings on screen when a call comes in — caller number, answer, decline. Mount once; silent until it rings.",
-      "dependencies": ["@handset/webrtc", "lucide-react"],
+      "description": "Rings on screen when a call comes in \u2014 caller number, answer, decline. Mount once; silent until it rings.",
+      "dependencies": [
+        "@handset/webrtc",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/new-york/incoming-call-toast/incoming-call-toast.tsx",
@@ -278,8 +360,14 @@
       "type": "registry:block",
       "title": "Softphone",
       "description": "A phone that lives inside your product: connection status, dialer, in-call controls, and inbound ringing in one panel.",
-      "dependencies": ["@handset/webrtc"],
-      "registryDependencies": ["@handset/dialer", "@handset/call-hud", "@handset/incoming-call-toast"],
+      "dependencies": [
+        "@handset/webrtc"
+      ],
+      "registryDependencies": [
+        "@handset/dialer",
+        "@handset/call-hud",
+        "@handset/incoming-call-toast"
+      ],
       "files": [
         {
           "path": "registry/new-york/softphone/softphone.tsx",
@@ -293,7 +381,9 @@
       "type": "registry:file",
       "title": "Next.js proxy routes",
       "description": "Server route that proxies Handset UI components to the Handset API. Your API key stays server-side; tenant scoping hooks into your session.",
-      "envVars": { "HANDSET_API_KEY": "" },
+      "envVars": {
+        "HANDSET_API_KEY": ""
+      },
       "files": [
         {
           "path": "registry/new-york/next-routes/route.ts",
@@ -307,7 +397,9 @@
       "type": "registry:file",
       "title": "Express proxy routes",
       "description": "Express router that proxies Handset UI components to the Handset API. Your API key stays server-side; tenant scoping hooks into your session. Mount at /api/handset.",
-      "envVars": { "HANDSET_API_KEY": "" },
+      "envVars": {
+        "HANDSET_API_KEY": ""
+      },
       "files": [
         {
           "path": "registry/new-york/express-routes/handset-routes.ts",
@@ -320,8 +412,10 @@
       "name": "remix-routes",
       "type": "registry:file",
       "title": "Remix / React Router proxy routes",
-      "description": "Resource route that proxies Handset UI components to the Handset API — works on Remix v2 and React Router 7. Your API key stays server-side; tenant scoping hooks into your session.",
-      "envVars": { "HANDSET_API_KEY": "" },
+      "description": "Resource route that proxies Handset UI components to the Handset API \u2014 works on Remix v2 and React Router 7. Your API key stays server-side; tenant scoping hooks into your session.",
+      "envVars": {
+        "HANDSET_API_KEY": ""
+      },
       "files": [
         {
           "path": "registry/new-york/remix-routes/api.handset.$.ts",

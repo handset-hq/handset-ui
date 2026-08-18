@@ -11,7 +11,9 @@ optimistic send), `messaging` (two-pane block), `opt-in-form`,
 `texting-readiness`.
 
 **Voice** — `click-to-call-button`, `call-log` (expanded rows show the AI
-call summary + transcript), `call-transcript` (live-poll), `voicemail-player`.
+call summary, keypad interactions, and transcript), `call-transcript`
+(live-poll), `call-keypad` (gather prompts + answered digits, loose
+keypresses, sent DTMF — also inside `contact-timeline`), `voicemail-player`.
 
 **MMS** — `composer` attachments via `onPickAttachment` (chips, per-message
 MMS footer, ≤10 URLs), image bubbles in `thread`, `media_urls` end to end.
@@ -37,8 +39,6 @@ Remix / React Router 7).
 
 - **`use-websocket` upgrade path** — the hooks are polling-first by design;
   a drop-in live transport once the API exposes one.
-- **Gather-aware surfaces** — components that visualize `call.gather`
-  results (confirmation outcomes in `call-log`, timeline entries).
 
 ## Later / exploring
 

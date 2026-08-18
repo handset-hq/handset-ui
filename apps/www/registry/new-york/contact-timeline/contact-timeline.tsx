@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VoicemailPlayer } from "@/components/handset/voicemail-player";
+import { CallKeypadView } from "@/components/handset/call-keypad";
 import { CallTranscriptView } from "@/components/handset/call-transcript";
 import { Composer } from "@/components/handset/composer";
 
@@ -157,6 +158,7 @@ function CallRow({ call }: { call: Call }) {
               <p className="mt-1 text-sm leading-relaxed">{call.summary}</p>
             </div>
           ) : null}
+          <CallKeypadView callId={call.id} className="mb-3" />
           <CallTranscriptView callId={call.id} />
         </div>
       ) : null}

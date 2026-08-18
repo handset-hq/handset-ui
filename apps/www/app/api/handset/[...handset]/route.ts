@@ -112,7 +112,9 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ handset: s
     return NextResponse.json(vm);
   }
   if (resource === "calls" && !id) {
-    const data = calls.map(materializeCall).sort((a, b) => Date.parse(b.started_at) - Date.parse(a.started_at));
+    const data = calls
+      .map((c) => ({ ...materializeCall(c), events: undefined }))
+      .sort((a, b) => Date.parse(b.started_at) - Date.parse(a.started_at));
     return NextResponse.json({ data, has_more: false, next_cursor: null });
   }
   if (resource === "calls" && id && handset[2] === "transcript") {
@@ -265,6 +267,8 @@ interface DemoCall {
   summary?: string | null;
   /** For simulated live calls: advance status by wall-clock elapsed time. */
   live?: boolean;
+  /** Event timeline — returned on retrieve only, like production. */
+  events?: { type: string; at: string; detail?: Record<string, unknown> | null }[];
 }
 
 const voicemails = [
@@ -293,6 +297,32 @@ const calls: DemoCall[] = [
   { id: "call_demo_1", direction: "outbound", from: "num_demo", to: "+14155550132", connect_to: "+14155550199", status: "completed", duration_seconds: 154, started_at: minutesAgo(31), ended_at: minutesAgo(28), summary: "The agent called Maria back about parking spot 12, which is still available. They agreed to add it to her lease at $40/month starting in September." },
   { id: "call_demo_vm", direction: "inbound", from: "+14155550163", to: "num_demo", status: "voicemail", duration_seconds: 23, started_at: minutesAgo(39), ended_at: minutesAgo(38) },
   { id: "call_demo_2", direction: "inbound", from: "+14155550188", to: "num_demo", status: "missed", started_at: minutesAgo(60 * 4), ended_at: minutesAgo(60 * 4) },
+  // An appointment-confirmation gather: prompt spoken, caller pressed 1.
+  {
+    id: "call_demo_gather",
+    direction: "outbound",
+    from: "num_demo",
+    to: "+14155550171",
+    status: "completed",
+    duration_seconds: 41,
+    started_at: minutesAgo(95),
+    ended_at: minutesAgo(94),
+    events: [
+      { type: "initiated", at: minutesAgo(95) },
+      { type: "answered", at: minutesAgo(95) },
+      {
+        type: "gather_started",
+        at: minutesAgo(95),
+        detail: {
+          prompt:
+            "Hi! This is Brightside Dental confirming your cleaning tomorrow at 10 AM. Press 1 to confirm, or 2 to reschedule.",
+          max_digits: 1,
+        },
+      },
+      { type: "gather_ended", at: minutesAgo(94), detail: { digits: "1", reason: "completed" } },
+      { type: "ended", at: minutesAgo(94), detail: { duration_seconds: 41 } },
+    ],
+  },
 ];
 
 /** Simulated live calls: dialing → ringing (2s) → in_progress (5s) → completed (17s). */
