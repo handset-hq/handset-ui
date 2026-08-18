@@ -124,6 +124,26 @@
       ]
     },
     {
+      "name": "agent-assist",
+      "type": "registry:component",
+      "title": "Agent assist panel",
+      "description": "Give it the number your agent is talking to: it finds the active call, turns on live transcription, streams the conversation and keypad events in real time, and shows the AI summary after hangup.",
+      "dependencies": [
+        "@handset/react"
+      ],
+      "registryDependencies": [
+        "@handset/call-transcript",
+        "@handset/call-keypad"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/agent-assist/agent-assist.tsx",
+          "type": "registry:component",
+          "target": "components/handset/agent-assist.tsx"
+        }
+      ]
+    },
+    {
       "name": "call-keypad",
       "type": "registry:component",
       "title": "Call keypad view",

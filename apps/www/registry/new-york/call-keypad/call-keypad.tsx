@@ -8,6 +8,8 @@ type CallEvent = NonNullable<Call["events"]>[number];
 
 export interface CallKeypadViewProps {
   callId: string | null;
+  /** Refetch interval in ms while a call is live. 0 (default) fetches once. */
+  pollMs?: number;
   className?: string;
 }
 
@@ -17,27 +19,32 @@ export interface CallKeypadViewProps {
  * end. Fetches the call's event timeline on mount and renders nothing when
  * the call had no keypad activity — safe to drop into any call expansion.
  */
-export function CallKeypadView({ callId, className }: CallKeypadViewProps) {
+export function CallKeypadView({ callId, pollMs = 0, className }: CallKeypadViewProps) {
   const client = useHandsetClient();
   const [events, setEvents] = React.useState<CallEvent[] | null>(null);
 
   React.useEffect(() => {
     if (!callId) return;
     let live = true;
-    client
-      .request<Call>("GET", `/calls/${callId}`)
-      .then((call) => {
-        if (live) setEvents(call.events ?? []);
-      })
-      .catch(() => {
-        // Keypad detail is an enrichment; the transcript view surfaces
-        // call-level errors, so a failed timeline read just renders nothing.
-        if (live) setEvents([]);
-      });
+    const fetchEvents = () => {
+      client
+        .request<Call>("GET", `/calls/${callId}`)
+        .then((call) => {
+          if (live) setEvents(call.events ?? []);
+        })
+        .catch(() => {
+          // Keypad detail is an enrichment; the transcript view surfaces
+          // call-level errors, so a failed timeline read just renders nothing.
+          if (live) setEvents((prev) => prev ?? []);
+        });
+    };
+    fetchEvents();
+    const timer = pollMs > 0 ? setInterval(fetchEvents, pollMs) : undefined;
     return () => {
       live = false;
+      if (timer) clearInterval(timer);
     };
-  }, [client, callId]);
+  }, [client, callId, pollMs]);
 
   const interactions = React.useMemo(() => parseKeypad(events ?? []), [events]);
   if (interactions.length === 0) return null;

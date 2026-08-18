@@ -33,6 +33,7 @@ export const DOCS_NAV = [
       { title: "Click-to-call", href: "/docs/components/click-to-call-button" },
       { title: "Call log", href: "/docs/components/call-log" },
       { title: "Call transcript", href: "/docs/components/call-transcript" },
+      { title: "Agent assist", href: "/docs/components/agent-assist" },
       { title: "Opt-in form", href: "/docs/components/opt-in-form" },
       { title: "Number picker", href: "/docs/components/number-picker" },
       { title: "Port status", href: "/docs/components/port-status" },

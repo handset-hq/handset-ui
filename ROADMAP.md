@@ -13,7 +13,9 @@ optimistic send), `messaging` (two-pane block), `opt-in-form`,
 **Voice** — `click-to-call-button`, `call-log` (expanded rows show the AI
 call summary, keypad interactions, and transcript), `call-transcript`
 (live-poll), `call-keypad` (gather prompts + answered digits, loose
-keypresses, sent DTMF — also inside `contact-timeline`), `voicemail-player`.
+keypresses, sent DTMF — also inside `contact-timeline`), `agent-assist`
+(finds the active call by number, starts on-demand transcription, streams
+the conversation live, AI summary after hangup), `voicemail-player`.
 
 **MMS** — `composer` attachments via `onPickAttachment` (chips, per-message
 MMS footer, ≤10 URLs), image bubbles in `thread`, `media_urls` end to end.
@@ -42,8 +44,6 @@ Remix / React Router 7).
 
 ## Later / exploring
 
-- Agent-assist surfaces on live transcripts (the `call-transcript` primitive
-  already polls mid-call).
 - Scheduled send + quiet-hours awareness in `composer`.
 - Theming presets showing the components under contrasting design systems.
 - React Native variants of the messaging primitives.

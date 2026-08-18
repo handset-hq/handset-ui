@@ -420,6 +420,11 @@ function demoWav(): Buffer {
 
 export async function POST(req: NextRequest, ctx: { params: Promise<{ handset: string[] }> }) {
   const { handset } = await ctx.params;
+  if (handset[0] === "calls" && handset[1] && handset[2] === "transcription") {
+    // Live demo calls stream their transcript regardless; this just answers
+    // the way production does so agent-assist flows run unmodified.
+    return NextResponse.json({ call_id: handset[1], status: "transcribing" }, { status: 202 });
+  }
   if (handset[0] === "calls") {
     const body = (await req.json()) as { from: string; to: string; connect_to: string };
     counter += 1;
