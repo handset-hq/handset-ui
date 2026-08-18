@@ -1,0 +1,35 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.handset-hq/handset",
+  "description": "A business phone system for AI agents: send texts, place calls, read transcripts, buy numbers.",
+  "repository": {
+    "url": "https://github.com/handset-hq/handset-ui",
+    "source": "github"
+  },
+  "version": "0.1.1",
+  "websiteUrl": "https://docs.handset.dev/ai.html",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@handset/mcp",
+      "version": "0.1.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "HANDSET_API_KEY",
+          "description": "Handset API key. Use a test-mode key (hs_test_\u2026) \u2014 simulated carrier, free. Live keys are refused unless HANDSET_ALLOW_LIVE=1.",
+          "isRequired": true,
+          "isSecret": true
+        },
+        {
+          "name": "HANDSET_ALLOW_LIVE",
+          "description": "Set to 1 to permit a live-mode key (the agent can then text and call real people at real cost).",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

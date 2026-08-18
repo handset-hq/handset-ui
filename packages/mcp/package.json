@@ -1,0 +1,50 @@
+{
+  "name": "@handset/mcp",
+  "version": "0.1.1",
+  "description": "MCP server for the Handset API \u2014 give any AI agent a business phone system: send texts, place calls, read transcripts, buy numbers. Safe by default with test-mode keys.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/handset-hq/handset-ui.git",
+    "directory": "packages/mcp"
+  },
+  "homepage": "https://docs.handset.dev/ai.html",
+  "keywords": [
+    "handset",
+    "mcp",
+    "modelcontextprotocol",
+    "sms",
+    "voice",
+    "telephony",
+    "ai-agent"
+  ],
+  "type": "module",
+  "bin": {
+    "handset-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "skill/SKILL.md",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup && chmod +x dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "@types/node": "^22.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "mcpName": "io.github.handset-hq/handset"
+}
