@@ -1,24 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { useHandsetClient } from "@handset/react";
+import { useCompliance, type Campaign, type CampaignUseCase } from "@handset/react";
 import { cn } from "@/lib/utils";
 
-/** The 10DLC campaign returned by POST /campaigns. */
-export interface Campaign {
-  id: string;
-  tenant_id: string;
-  brand_id: string;
-  use_case: string;
-  description: string;
-  sample_messages: string[];
-  opt_in_description?: string | null;
-  status: string;
-  rejection_reason?: string | null;
-  created_at: string;
-}
+export type { Campaign };
 
-const USE_CASES = [
+const USE_CASES: { value: CampaignUseCase; label: string }[] = [
   { value: "customer_care", label: "Customer care" },
   { value: "appointment_reminders", label: "Appointment reminders" },
   { value: "marketing", label: "Marketing" },
@@ -38,15 +26,14 @@ export interface CampaignRegistrationFormProps {
 /**
  * A 10DLC campaign registration form. Carriers review the use case, the
  * description, 2–5 sample messages, and how recipients opt in — so the form
- * enforces those minimums before POSTing to /campaigns through your proxy.
+ * enforces those minimums before registering via the useCompliance() hook.
  */
 export function CampaignRegistrationForm({ tenantId, brandId, onRegistered, className }: CampaignRegistrationFormProps) {
-  const client = useHandsetClient();
-  const [useCase, setUseCase] = React.useState("customer_care");
+  const { registerCampaign, isSubmitting } = useCompliance();
+  const [useCase, setUseCase] = React.useState<CampaignUseCase>("customer_care");
   const [description, setDescription] = React.useState("");
   const [optIn, setOptIn] = React.useState("");
   const [samples, setSamples] = React.useState<string[]>(["", ""]);
-  const [status, setStatus] = React.useState<"idle" | "submitting" | "done">("idle");
   const [error, setError] = React.useState<string | null>(null);
   const [campaign, setCampaign] = React.useState<Campaign | null>(null);
 
@@ -71,28 +58,23 @@ export function CampaignRegistrationForm({ tenantId, brandId, onRegistered, clas
       setError("Describe how recipients opt in, in at least 40 characters.");
       return;
     }
-    setStatus("submitting");
     try {
-      const created = await client.request<Campaign>("POST", "/campaigns", {
-        body: {
-          tenant_id: tenantId,
-          brand_id: brandId,
-          use_case: useCase,
-          description: description.trim(),
-          sample_messages: filled,
-          opt_in_description: optIn.trim(),
-        },
+      const created = await registerCampaign({
+        tenantId,
+        brandId,
+        useCase,
+        description: description.trim(),
+        sampleMessages: filled,
+        optInDescription: optIn.trim(),
       });
       setCampaign(created);
-      setStatus("done");
       onRegistered?.(created);
     } catch (err) {
-      setStatus("idle");
       setError(err instanceof Error ? err.message : "Could not register the campaign.");
     }
   };
 
-  if (status === "done" && campaign) {
+  if (campaign) {
     return (
       <div className={cn("rounded-lg border p-4 text-sm", className)} role="status">
         <p className="font-medium">Campaign submitted for carrier review.</p>
@@ -107,7 +89,7 @@ export function CampaignRegistrationForm({ tenantId, brandId, onRegistered, clas
   return (
     <form onSubmit={submit} className={cn("space-y-4", className)}>
       <Field label="Use case" htmlFor="campaign-use-case">
-        <select id="campaign-use-case" value={useCase} onChange={(e) => setUseCase(e.target.value)} className={inputCls}>
+        <select id="campaign-use-case" value={useCase} onChange={(e) => setUseCase(e.target.value as CampaignUseCase)} className={inputCls}>
           {USE_CASES.map((u) => (
             <option key={u.value} value={u.value}>{u.label}</option>
           ))}
@@ -163,8 +145,8 @@ export function CampaignRegistrationForm({ tenantId, brandId, onRegistered, clas
         />
       </Field>
       {error ? <p className="text-xs text-destructive" role="alert">{error}</p> : null}
-      <button type="submit" disabled={status === "submitting"} className={buttonCls}>
-        {status === "submitting" ? "Submitting…" : "Register campaign"}
+      <button type="submit" disabled={isSubmitting} className={buttonCls}>
+        {isSubmitting ? "Submitting…" : "Register campaign"}
       </button>
     </form>
   );

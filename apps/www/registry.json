@@ -320,7 +320,7 @@
       "title": "Brand registration form",
       "description": "A 10DLC brand registration form: legal identity, EIN, and business contact, validated and POSTed to /brands.",
       "dependencies": [
-        "@handset/react"
+        "@handset/react@^0.4.0"
       ],
       "files": [
         {
@@ -336,7 +336,7 @@
       "title": "Campaign registration form",
       "description": "A 10DLC campaign registration form: use case, description, 2\u20135 sample messages, and opt-in details, POSTed to /campaigns.",
       "dependencies": [
-        "@handset/react"
+        "@handset/react@^0.4.0"
       ],
       "files": [
         {
@@ -352,7 +352,7 @@
       "title": "E911 address form",
       "description": "An E911 emergency-address form for a tenant's numbers, validated and POSTed to /e911_addresses.",
       "dependencies": [
-        "@handset/react"
+        "@handset/react@^0.4.0"
       ],
       "files": [
         {
@@ -368,7 +368,7 @@
       "title": "Compliance status",
       "description": "Tracks 10DLC brand and campaign approval: status badge, rejection reason, and assigned throughput; polls while pending.",
       "dependencies": [
-        "@handset/react",
+        "@handset/react@^0.4.0",
         "lucide-react"
       ],
       "files": [

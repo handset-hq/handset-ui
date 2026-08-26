@@ -1,22 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { useHandsetClient } from "@handset/react";
+import { useCompliance, type Brand, type BrandEntityType } from "@handset/react";
 import { cn } from "@/lib/utils";
 
-/** The 10DLC brand returned by POST /brands. */
-export interface Brand {
-  id: string;
-  legal_name: string;
-  ein: string; // masked, e.g. **-***6789
-  entity_type: string;
-  contact_email: string;
-  status: string;
-  rejection_reason?: string | null;
-  created_at: string;
-}
+export type { Brand };
 
-const ENTITY_TYPES = [
+const ENTITY_TYPES: { value: BrandEntityType; label: string }[] = [
   { value: "private_company", label: "Private company" },
   { value: "public_company", label: "Public company" },
   { value: "non_profit", label: "Non-profit" },
@@ -47,14 +37,13 @@ export interface BrandRegistrationFormProps {
 
 /**
  * A 10DLC brand registration form. Collects the TCR-required legal identity
- * and business contact, validates the EIN and phone before submit, and POSTs
- * to /brands through your Handset proxy. On success it surfaces the brand's
- * initial vetting status.
+ * and business contact, validates the EIN and phone before submit, and
+ * registers the brand via the useCompliance() hook — then surfaces its initial
+ * vetting status.
  */
 export function BrandRegistrationForm({ tenantId, onRegistered, className }: BrandRegistrationFormProps) {
-  const client = useHandsetClient();
+  const { registerBrand, isSubmitting } = useCompliance();
   const [v, setV] = React.useState(EMPTY);
-  const [status, setStatus] = React.useState<"idle" | "submitting" | "done">("idle");
   const [error, setError] = React.useState<string | null>(null);
   const [brand, setBrand] = React.useState<Brand | null>(null);
 
@@ -72,33 +61,29 @@ export function BrandRegistrationForm({ tenantId, onRegistered, className }: Bra
       setError("Phone must be E.164, e.g. +14155550142.");
       return;
     }
-    setStatus("submitting");
     try {
-      const body: Record<string, unknown> = {
-        legal_name: v.legal_name.trim(),
+      const created = await registerBrand({
+        tenantId,
+        legalName: v.legal_name.trim(),
+        dba: v.dba.trim() || undefined,
         ein: v.ein.trim(),
-        entity_type: v.entity_type,
-        contact_email: v.contact_email.trim(),
+        entityType: v.entity_type as BrandEntityType,
+        website: v.website.trim() || undefined,
+        contactEmail: v.contact_email.trim(),
         phone: v.phone.trim(),
         street: v.street.trim(),
         city: v.city.trim(),
         state: v.state.trim().toUpperCase(),
-        postal_code: v.postal_code.trim(),
-      };
-      if (v.dba.trim()) body.dba = v.dba.trim();
-      if (v.website.trim()) body.website = v.website.trim();
-      if (tenantId) body.tenant_id = tenantId;
-      const created = await client.request<Brand>("POST", "/brands", { body });
+        postalCode: v.postal_code.trim(),
+      });
       setBrand(created);
-      setStatus("done");
       onRegistered?.(created);
     } catch (err) {
-      setStatus("idle");
       setError(err instanceof Error ? err.message : "Could not register the brand.");
     }
   };
 
-  if (status === "done" && brand) {
+  if (brand) {
     return (
       <div className={cn("rounded-lg border p-4 text-sm", className)} role="status">
         <p className="font-medium">Brand submitted for vetting.</p>
@@ -158,8 +143,8 @@ export function BrandRegistrationForm({ tenantId, onRegistered, className }: Bra
         </Field>
       </div>
       {error ? <p className="text-xs text-destructive" role="alert">{error}</p> : null}
-      <button type="submit" disabled={status === "submitting"} className={buttonCls}>
-        {status === "submitting" ? "Submitting…" : "Register brand"}
+      <button type="submit" disabled={isSubmitting} className={buttonCls}>
+        {isSubmitting ? "Submitting…" : "Register brand"}
       </button>
     </form>
   );

@@ -1,21 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { useHandsetClient } from "@handset/react";
+import { useCompliance, type E911Address } from "@handset/react";
 import { cn } from "@/lib/utils";
 
-/** The emergency address returned by POST /e911_addresses. */
-export interface E911Address {
-  id: string;
-  tenant_id: string;
-  street: string;
-  unit?: string | null;
-  city: string;
-  state: string;
-  postal_code: string;
-  status: string;
-  created_at: string;
-}
+export type { E911Address };
 
 const EMPTY = { street: "", unit: "", city: "", state: "", postal_code: "" };
 
@@ -28,13 +17,12 @@ export interface E911AddressFormProps {
 
 /**
  * An E911 emergency-address form. Collects and validates the civic address a
- * carrier dispatches on for a tenant's numbers, then POSTs to /e911_addresses
- * through your proxy and reports the validation status it comes back with.
+ * carrier dispatches on for a tenant's numbers, registers it via the
+ * useCompliance() hook, and reports the validation status it comes back with.
  */
 export function E911AddressForm({ tenantId, onRegistered, className }: E911AddressFormProps) {
-  const client = useHandsetClient();
+  const { registerE911, isSubmitting } = useCompliance();
   const [v, setV] = React.useState(EMPTY);
-  const [status, setStatus] = React.useState<"idle" | "submitting" | "done">("idle");
   const [error, setError] = React.useState<string | null>(null);
   const [address, setAddress] = React.useState<E911Address | null>(null);
 
@@ -48,27 +36,23 @@ export function E911AddressForm({ tenantId, onRegistered, className }: E911Addre
       setError("State must be a 2-letter code, e.g. CA.");
       return;
     }
-    setStatus("submitting");
     try {
-      const body: Record<string, unknown> = {
-        tenant_id: tenantId,
+      const created = await registerE911({
+        tenantId,
         street: v.street.trim(),
+        unit: v.unit.trim() || undefined,
         city: v.city.trim(),
         state: v.state.trim().toUpperCase(),
-        postal_code: v.postal_code.trim(),
-      };
-      if (v.unit.trim()) body.unit = v.unit.trim();
-      const created = await client.request<E911Address>("POST", "/e911_addresses", { body });
+        postalCode: v.postal_code.trim(),
+      });
       setAddress(created);
-      setStatus("done");
       onRegistered?.(created);
     } catch (err) {
-      setStatus("idle");
       setError(err instanceof Error ? err.message : "Could not save the emergency address.");
     }
   };
 
-  if (status === "done" && address) {
+  if (address) {
     return (
       <div className={cn("rounded-lg border p-4 text-sm", className)} role="status">
         <p className="font-medium">Emergency address saved.</p>
@@ -100,8 +84,8 @@ export function E911AddressForm({ tenantId, onRegistered, className }: E911Addre
         </Field>
       </div>
       {error ? <p className="text-xs text-destructive" role="alert">{error}</p> : null}
-      <button type="submit" disabled={status === "submitting"} className={buttonCls}>
-        {status === "submitting" ? "Saving…" : "Save emergency address"}
+      <button type="submit" disabled={isSubmitting} className={buttonCls}>
+        {isSubmitting ? "Saving…" : "Save emergency address"}
       </button>
     </form>
   );
