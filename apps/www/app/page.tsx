@@ -38,7 +38,7 @@ export default function Home() {
           <span className="text-sm font-semibold tracking-tight text-primary">UI</span>
         </span>
         <nav className="flex items-center gap-5 text-sm text-muted-foreground">
-          <a className="transition-colors hover:text-foreground" href="/docs">Docs</a>
+          <a className="transition-colors hover:text-foreground" href="/docs">Components</a>
           <a className="transition-colors hover:text-foreground" href="https://github.com/handset-hq/handset-ui">GitHub</a>
           <a className="transition-colors hover:text-foreground" href="https://docs.handset.dev">API docs</a>
           <a className="transition-colors hover:text-foreground" href="https://handset.dev">handset.dev</a>
