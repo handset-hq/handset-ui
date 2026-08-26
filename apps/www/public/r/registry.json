@@ -315,6 +315,71 @@
       ]
     },
     {
+      "name": "brand-registration-form",
+      "type": "registry:component",
+      "title": "Brand registration form",
+      "description": "A 10DLC brand registration form: legal identity, EIN, and business contact, validated and POSTed to /brands.",
+      "dependencies": [
+        "@handset/react"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/brand-registration-form/brand-registration-form.tsx",
+          "type": "registry:component",
+          "target": "components/handset/brand-registration-form.tsx"
+        }
+      ]
+    },
+    {
+      "name": "campaign-registration-form",
+      "type": "registry:component",
+      "title": "Campaign registration form",
+      "description": "A 10DLC campaign registration form: use case, description, 2\u20135 sample messages, and opt-in details, POSTed to /campaigns.",
+      "dependencies": [
+        "@handset/react"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/campaign-registration-form/campaign-registration-form.tsx",
+          "type": "registry:component",
+          "target": "components/handset/campaign-registration-form.tsx"
+        }
+      ]
+    },
+    {
+      "name": "e911-address-form",
+      "type": "registry:component",
+      "title": "E911 address form",
+      "description": "An E911 emergency-address form for a tenant's numbers, validated and POSTed to /e911_addresses.",
+      "dependencies": [
+        "@handset/react"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/e911-address-form/e911-address-form.tsx",
+          "type": "registry:component",
+          "target": "components/handset/e911-address-form.tsx"
+        }
+      ]
+    },
+    {
+      "name": "compliance-status",
+      "type": "registry:component",
+      "title": "Compliance status",
+      "description": "Tracks 10DLC brand and campaign approval: status badge, rejection reason, and assigned throughput; polls while pending.",
+      "dependencies": [
+        "@handset/react",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/compliance-status/compliance-status.tsx",
+          "type": "registry:component",
+          "target": "components/handset/compliance-status.tsx"
+        }
+      ]
+    },
+    {
       "name": "usage-meter",
       "type": "registry:component",
       "title": "Usage meter",
