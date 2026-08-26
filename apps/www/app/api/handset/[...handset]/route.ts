@@ -99,6 +99,31 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ handset: s
     if (!convo) return NextResponse.json({ error: { code: "not_found", message: "No such conversation" } }, { status: 404 });
     return NextResponse.json(convo);
   }
+  if (resource === "messages" && id === "stats") {
+    const outbound = messages.filter((m) => m.direction === "outbound");
+    const by = (s: string) => outbound.filter((m) => m.status === s).length;
+    const delivered = by("delivered");
+    const failed = outbound.filter((m) => m.status === "failed");
+    const settled = delivered + failed.length;
+    const reasons = new Map<string, number>();
+    for (const m of failed) {
+      const c = m.error_code ?? "unknown";
+      reasons.set(c, (reasons.get(c) ?? 0) + 1);
+    }
+    return NextResponse.json({
+      start: minutesAgo(60 * 24 * 30),
+      end: new Date(NOW).toISOString(),
+      outbound: {
+        total: outbound.length,
+        delivered,
+        sent: by("sent"),
+        failed: failed.length,
+        pending: by("queued") + by("sending") + by("scheduled"),
+        delivery_rate: settled ? delivered / settled : 0,
+        failure_reasons: [...reasons.entries()].sort((a, b) => b[1] - a[1]).map(([code, count]) => ({ code, count })),
+      },
+    });
+  }
   if (resource === "messages") {
     const cid = _req.nextUrl.searchParams.get("conversation_id");
     const data = messages
@@ -602,12 +627,30 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ handset: s
   if (handset[0] !== "messages") {
     return NextResponse.json({ error: { code: "not_found", message: "Unknown route" } }, { status: 404 });
   }
-  const body = (await req.json()) as { to: string; body?: string; media_urls?: string[] };
+  const body = (await req.json()) as { to: string; body?: string; media_urls?: string[]; send_at?: string };
   const convo = conversations.find((c) => c.external_number === body.to);
   if (convo?.opted_out) {
     return NextResponse.json(
       { error: { code: "recipient_opted_out", message: "This recipient has opted out" } },
       { status: 422 },
+    );
+  }
+  if (body.send_at) {
+    counter += 1;
+    return NextResponse.json(
+      {
+        id: `msg_demo_${counter}`,
+        conversation_id: convo?.id ?? "cnv_demo_maria",
+        direction: "outbound",
+        from: "num_demo",
+        to: body.to,
+        body: body.body ?? null,
+        status: "scheduled",
+        scheduled_at: body.send_at,
+        segments: 1,
+        created_at: new Date().toISOString(),
+      },
+      { status: 202 },
     );
   }
   counter += 1;

@@ -63,6 +63,22 @@
       ]
     },
     {
+      "name": "scheduled-composer",
+      "type": "registry:component",
+      "title": "Scheduled composer",
+      "description": "A composer that sends now or schedules for later via the API's send_at.",
+      "dependencies": [
+        "@handset/react"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/scheduled-composer/scheduled-composer.tsx",
+          "type": "registry:component",
+          "target": "components/handset/scheduled-composer.tsx"
+        }
+      ]
+    },
+    {
       "name": "quiet-hours",
       "type": "registry:component",
       "title": "Quiet hours",

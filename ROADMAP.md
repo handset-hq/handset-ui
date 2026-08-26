@@ -12,7 +12,8 @@ optimistic send), `messaging` (two-pane block), `opt-in-form`,
 `message-templates` (`{{variable}}` merge), `broadcast-composer`
 (send-to-many, one call each, opt-outs surfaced per recipient),
 `quick-replies`, `quiet-hours` (a sending-window guard — warns and gates the
-send button outside allowed local hours).
+send button outside allowed local hours), `scheduled-composer` (send now or
+later via the API's `send_at`).
 
 **Messaging primitives** — `message-bubble`, `delivery-status`,
 `message-group` (iMessage-style same-side clustering), `date-divider`
@@ -73,13 +74,12 @@ a 60s safety net. `useHandsetEvents` exposes the raw stream.
 
 ## Next
 
-1. **Scheduled send (needs an API change first)** — real deferral requires a
-   `send_at` field on `POST /messages` in the Handset API; today it sends
-   immediately, so `quiet-hours` ships only the prevent-ill-timed-sends half.
-   Add `send_at` server-side, then a scheduled-send composer.
-2. **Deeper analytics (needs an API change first)** — a tenant-facing stats
-   endpoint would let `usage-dashboard` show a real time series and
-   `deliverability-panel` cover long windows without client-side sampling.
+The UI-buildable backlog is caught up — the last two items shipped once the
+API caught up (`send_at` on `POST /messages` and `GET /messages/stats`, both
+live). `scheduled-composer` now uses real server-side scheduling, and
+`deliverability-panel` reads the stats endpoint instead of sampling.
+
+New components move when a real product needs one — open an issue.
 
 ## Later / exploring
 

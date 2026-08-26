@@ -39,6 +39,7 @@ const ALLOWED: { method: string; match: (path: string) => boolean }[] = [
   { method: "GET", match: (p) => p === "conversations" },
   { method: "GET", match: (p) => /^conversations\/[\w]+$/.test(p) },
   { method: "GET", match: (p) => p === "messages" },
+  { method: "GET", match: (p) => p === "messages/stats" },
   { method: "POST", match: (p) => p === "messages" },
   { method: "GET", match: (p) => p === "voicemails" },
   { method: "GET", match: (p) => /^voicemails\/[\w]+$/.test(p) },
