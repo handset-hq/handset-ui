@@ -18,5 +18,5 @@
       "target": "components/handset/agent-assist.tsx"
     }
   ],
-  "type": "registry:component"
+  "type": "registry:block"
 }

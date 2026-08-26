@@ -195,7 +195,7 @@
     },
     {
       "name": "agent-assist",
-      "type": "registry:component",
+      "type": "registry:block",
       "title": "Agent assist panel",
       "description": "Give it the number your agent is talking to: it finds the active call, turns on live transcription, streams the conversation and keypad events in real time, and shows the AI summary after hangup.",
       "dependencies": [

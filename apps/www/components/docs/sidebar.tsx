@@ -22,6 +22,7 @@ export const DOCS_NAV = [
       { title: "Phone system", href: "/docs/components/phone-system" },
       { title: "Contact timeline", href: "/docs/components/contact-timeline" },
       { title: "Messaging", href: "/docs/components/messaging" },
+      { title: "Agent assist", href: "/docs/components/agent-assist" },
     ],
   },
   {
@@ -38,7 +39,6 @@ export const DOCS_NAV = [
       { title: "Click-to-call", href: "/docs/components/click-to-call-button" },
       { title: "Call log", href: "/docs/components/call-log" },
       { title: "Call transcript", href: "/docs/components/call-transcript" },
-      { title: "Agent assist", href: "/docs/components/agent-assist" },
       { title: "Number picker", href: "/docs/components/number-picker" },
       { title: "Port status", href: "/docs/components/port-status" },
       { title: "Texting readiness", href: "/docs/components/texting-readiness" },
