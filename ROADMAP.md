@@ -8,7 +8,9 @@ if your use case should reorder this list.
 
 **Messaging** — `inbox`, `thread`, `composer` (GSM-7/UCS-2 segment counter,
 optimistic send), `messaging` (two-pane block), `opt-in-form`,
-`texting-readiness`.
+`texting-readiness`, `quick-replies` (tappable canned responses),
+`message-templates` (`{{variable}}` merge), `broadcast-composer`
+(send-to-many, one call each, opt-outs surfaced per recipient).
 
 **Messaging primitives** — `message-bubble`, `delivery-status`,
 `message-group` (iMessage-style same-side clustering), `date-divider`
@@ -37,7 +39,9 @@ proxy), `compliance-status` (brand + campaign approval tracker: badge,
 rejection reason, assigned throughput; polls while pending),
 `port-in-wizard` (check portability → account details → review → submit; the
 create/submit flow `port-status` only lets you watch), `business-hours-editor`
-(edit a routing config's weekly hours). The proxy now exposes `brands`,
+(edit a routing config's weekly hours), `routing-builder` (the full editor:
+hours + open/closed behavior — ring targets and strategy or voicemail — plus
+recording policy). The proxy now exposes `brands`,
 `campaigns`, `e911_addresses`, `routing_configs` (incl. `PATCH`), and the
 `port_ins` check/create/submit/cancel routes.
 
@@ -67,22 +71,13 @@ a 60s safety net. `useHandsetEvents` exposes the raw stream.
 Prioritized by capability-to-UI gap — the Handset API supports each of these
 today with no component to drive it.
 
-1. **Routing builder** — the fuller sibling of `business-hours-editor`: edit
-   `open_behavior` / `closed_behavior` too (ring targets + strategy, roll to
-   voicemail, recording policy), not just the hours.
-2. **Messaging power tools** — `message-templates` with `{{variable}}` merge,
-   `quick-replies`, and a `broadcast-composer` (send-to-many respecting
-   opt-outs). Serves appointments / recruiting / field-service directly.
+1. **Analytics** — `usage-dashboard` (messages/minutes/spend over time) and a
+   `deliverability-panel` (failure-reason breakdown), beyond the single
+   `usage-meter`.
+2. **Scheduled send** — quiet-hours awareness in `composer` / `broadcast-composer`.
 
 ## Later / exploring
 
-- `message-templates` with `{{variable}}` merge, `quick-replies`, and a
-  `broadcast-composer` (send-to-many that respects opt-outs).
-- `usage-dashboard` (messages/minutes/spend over time) and a
-  `deliverability-panel` (failure-reason breakdown), beyond the single
-  `usage-meter`.
-
-- Scheduled send + quiet-hours awareness in `composer`.
 - Theming presets showing the components under contrasting design systems.
 - React Native variants of the messaging primitives.
 

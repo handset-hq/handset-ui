@@ -21,6 +21,48 @@
       ]
     },
     {
+      "name": "quick-replies",
+      "type": "registry:component",
+      "title": "Quick replies",
+      "description": "A row of tappable canned responses; await-aware so a send in flight can't double-fire.",
+      "files": [
+        {
+          "path": "registry/new-york/quick-replies/quick-replies.tsx",
+          "type": "registry:component",
+          "target": "components/handset/quick-replies.tsx"
+        }
+      ]
+    },
+    {
+      "name": "message-templates",
+      "type": "registry:component",
+      "title": "Message templates",
+      "description": "A saved-message picker with {{variable}} merge and per-row preview.",
+      "files": [
+        {
+          "path": "registry/new-york/message-templates/message-templates.tsx",
+          "type": "registry:component",
+          "target": "components/handset/message-templates.tsx"
+        }
+      ]
+    },
+    {
+      "name": "broadcast-composer",
+      "type": "registry:component",
+      "title": "Broadcast composer",
+      "description": "Send one message to many recipients, one call each, with per-recipient results (opt-outs surfaced).",
+      "dependencies": [
+        "@handset/react"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/broadcast-composer/broadcast-composer.tsx",
+          "type": "registry:component",
+          "target": "components/handset/broadcast-composer.tsx"
+        }
+      ]
+    },
+    {
       "name": "thread",
       "type": "registry:component",
       "title": "Thread",
@@ -365,6 +407,23 @@
           "path": "registry/new-york/business-hours-editor/business-hours-editor.tsx",
           "type": "registry:component",
           "target": "components/handset/business-hours-editor.tsx"
+        }
+      ]
+    },
+    {
+      "name": "routing-builder",
+      "type": "registry:component",
+      "title": "Routing builder",
+      "description": "The full voice routing editor: business hours, open/closed behavior (ring or voicemail), and recording policy.",
+      "dependencies": [
+        "@handset/react@^0.5.0",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/routing-builder/routing-builder.tsx",
+          "type": "registry:component",
+          "target": "components/handset/routing-builder.tsx"
         }
       ]
     },
