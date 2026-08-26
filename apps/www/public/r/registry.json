@@ -318,6 +318,23 @@
       ]
     },
     {
+      "name": "port-in-wizard",
+      "type": "registry:component",
+      "title": "Port-in wizard",
+      "description": "A guided port-in: check portability, collect losing-carrier account details, open a draft, and submit for review.",
+      "dependencies": [
+        "@handset/react@^0.5.0",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/port-in-wizard/port-in-wizard.tsx",
+          "type": "registry:component",
+          "target": "components/handset/port-in-wizard.tsx"
+        }
+      ]
+    },
+    {
       "name": "texting-readiness",
       "type": "registry:component",
       "title": "Texting readiness",
@@ -331,6 +348,23 @@
           "path": "registry/new-york/texting-readiness/texting-readiness.tsx",
           "type": "registry:component",
           "target": "components/handset/texting-readiness.tsx"
+        }
+      ]
+    },
+    {
+      "name": "business-hours-editor",
+      "type": "registry:component",
+      "title": "Business hours editor",
+      "description": "Edit the weekly business hours on a voice routing config: windows, day toggles, open/close times; PATCHes the config.",
+      "dependencies": [
+        "@handset/react@^0.5.0",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/business-hours-editor/business-hours-editor.tsx",
+          "type": "registry:component",
+          "target": "components/handset/business-hours-editor.tsx"
         }
       ]
     },

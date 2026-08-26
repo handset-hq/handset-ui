@@ -169,6 +169,12 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ handset: s
   if (resource === "campaigns" && id) {
     return NextResponse.json(demoCampaign(id));
   }
+  if (resource === "routing_configs" && !id) {
+    return NextResponse.json({ data: [demoRc], has_more: false, next_cursor: null });
+  }
+  if (resource === "routing_configs" && id) {
+    return NextResponse.json({ ...demoRc, id });
+  }
   if (resource === "demo-audio") {
     return new NextResponse(new Uint8Array(demoWav()), {
       headers: { "content-type": "audio/wav", "cache-control": "public, max-age=3600" },
@@ -209,6 +215,43 @@ function demoCampaign(id: string) {
 }
 
 const lastFour = (ein: string) => String(ein).replace(/\D/g, "").slice(-4).padStart(4, "*");
+
+// ---------- routing / porting demo data ----------
+
+let demoRc: Record<string, unknown> = {
+  id: "rtc_demo",
+  tenant_id: "tnt_demo",
+  name: "Main line",
+  business_hours: { schedule: [{ days: ["mon", "tue", "wed", "thu", "fri"], open: "09:00", close: "17:00" }] },
+  open_behavior: { type: "ring", targets: ["+14155550100"], strategy: "simultaneous", timeout_seconds: 20 },
+  closed_behavior: { type: "voicemail", transcribe: true },
+  recording: { enabled: false, consent_announcement: false },
+  created_at: minutesAgo(60 * 24 * 10),
+};
+
+function demoPortDraft(id: string, body?: Record<string, unknown>) {
+  const acct = String((body?.account_number as string) ?? "4821");
+  return {
+    id,
+    tenant_id: "tnt_demo",
+    phone_numbers: (body?.phone_numbers as string[] | undefined) ?? ["+14155550142"],
+    status: "draft",
+    status_detail: null,
+    entity_name: (body?.entity_name as string) ?? "Bayview Dental LLC",
+    authorized_person: (body?.authorized_person as string) ?? "Alex Rivera",
+    billing_phone_number: (body?.billing_phone_number as string) ?? "+14155550142",
+    account_number: "••••" + acct.slice(-4),
+    service_address:
+      (body?.service_address as Record<string, string>) ?? {
+        street: "500 Ocean Ave",
+        city: "San Francisco",
+        state: "CA",
+        postal_code: "94112",
+      },
+    foc_date: null,
+    created_at: new Date().toISOString(),
+  };
+}
 
 // ---------- numbers / porting demo data ----------
 
@@ -457,6 +500,16 @@ function demoWav(): Buffer {
   return Buffer.concat([header, data]);
 }
 
+export async function PATCH(req: NextRequest, ctx: { params: Promise<{ handset: string[] }> }) {
+  const { handset } = await ctx.params;
+  if (handset[0] === "routing_configs" && handset[1]) {
+    const patch = (await req.json()) as Record<string, unknown>;
+    demoRc = { ...demoRc, ...patch, id: handset[1] };
+    return NextResponse.json(demoRc);
+  }
+  return NextResponse.json({ error: { code: "not_found", message: "Unknown route" } }, { status: 404 });
+}
+
 export async function POST(req: NextRequest, ctx: { params: Promise<{ handset: string[] }> }) {
   const { handset } = await ctx.params;
   if (handset[0] === "calls" && handset[1] && handset[2] === "transcription") {
@@ -517,6 +570,31 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ handset: s
       { id: `e911_demo_${counter}`, tenant_id: a.tenant_id, street: a.street, unit: a.unit ?? null, city: a.city, state: a.state, postal_code: a.postal_code, status: "pending", created_at: new Date().toISOString() },
       { status: 201 },
     );
+  }
+  if (handset[0] === "port_ins" && handset[1] === "check") {
+    const b = (await req.json()) as { phone_numbers?: string[] };
+    const data = (b.phone_numbers ?? []).map((n) => ({
+      phone_number: n,
+      portable: !n.includes("0004"),
+      reason: n.includes("0004") ? "This number isn't portable from its current carrier." : null,
+    }));
+    return NextResponse.json({ data });
+  }
+  if (handset[0] === "port_ins" && handset[1] && handset[2] === "submit") {
+    return NextResponse.json({ ...demoPortDraft(handset[1]), status: "in_review" });
+  }
+  if (handset[0] === "port_ins" && handset[1] && handset[2] === "cancel") {
+    return NextResponse.json({ ...demoPortDraft(handset[1]), status: "cancelled" });
+  }
+  if (handset[0] === "port_ins") {
+    const b = (await req.json()) as Record<string, unknown>;
+    counter += 1;
+    return NextResponse.json(demoPortDraft(`port_demo_${counter}`, b), { status: 201 });
+  }
+  if (handset[0] === "routing_configs") {
+    const b = (await req.json()) as Record<string, unknown>;
+    counter += 1;
+    return NextResponse.json({ ...demoRc, ...b, id: `rtc_demo_${counter}` }, { status: 201 });
   }
   if (handset[0] !== "messages") {
     return NextResponse.json({ error: { code: "not_found", message: "Unknown route" } }, { status: 404 });

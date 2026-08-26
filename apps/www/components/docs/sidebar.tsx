@@ -42,6 +42,8 @@ export const DOCS_NAV = [
       { title: "Call transcript", href: "/docs/components/call-transcript" },
       { title: "Number picker", href: "/docs/components/number-picker" },
       { title: "Port status", href: "/docs/components/port-status" },
+      { title: "Port-in wizard", href: "/docs/components/port-in-wizard" },
+      { title: "Business hours editor", href: "/docs/components/business-hours-editor" },
       { title: "Texting readiness", href: "/docs/components/texting-readiness" },
       { title: "Compliance status", href: "/docs/components/compliance-status" },
       { title: "Usage meter", href: "/docs/components/usage-meter" },

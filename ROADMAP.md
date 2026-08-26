@@ -34,9 +34,12 @@ with generated ringtone).
 `brand-registration-form`, `campaign-registration-form`, `e911-address-form`
 (10DLC + E911 registration, validated client-side and POSTed through your
 proxy), `compliance-status` (brand + campaign approval tracker: badge,
-rejection reason, assigned throughput; polls while pending). The proxy
-routes now expose `POST /brands`, `/campaigns`, `/e911_addresses` and the
-matching reads.
+rejection reason, assigned throughput; polls while pending),
+`port-in-wizard` (check portability → account details → review → submit; the
+create/submit flow `port-status` only lets you watch), `business-hours-editor`
+(edit a routing config's weekly hours). The proxy now exposes `brands`,
+`campaigns`, `e911_addresses`, `routing_configs` (incl. `PATCH`), and the
+`port_ins` check/create/submit/cancel routes.
 
 **Blocks & plumbing** — `agent-assist` (finds the active call by number,
 starts on-demand transcription, streams the conversation live, AI summary
@@ -54,7 +57,8 @@ your proxy): hooks refetch the instant events happen and polling drops to
 a 60s safety net. `useHandsetEvents` exposes the raw stream.
 
 **Packages** — [`@handset/react`](https://www.npmjs.com/package/@handset/react)
-(headless hooks; 0.4.0 adds `useCompliance` / `useBrand` / `useCampaign`) and
+(headless hooks; 0.4.0 adds compliance hooks, 0.5.0 adds `useRoutingConfig` /
+`usePorting`) and
 [`@handset/webrtc`](https://www.npmjs.com/package/@handset/webrtc)
 (carrier-agnostic softphone core).
 
@@ -63,15 +67,12 @@ a 60s safety net. `useHandsetEvents` exposes the raw stream.
 Prioritized by capability-to-UI gap — the Handset API supports each of these
 today with no component to drive it.
 
-1. **Voice routing** — `business-hours-editor` (weekly schedule + timezone per
-   business). Hours live inside a `routing_config` document (`POST/PATCH
-   /routing_configs`), which also carries `open_behavior` / `closed_behavior`,
-   so this needs proxy routes for `routing_configs` and a scope decision
-   (hours-only vs the fuller routing editor).
-2. **Porting** — `port-in-wizard` (the create/submit flow; we ship `port-status`
-   for viewing only). Needs proxy routes for `POST /port_ins`,
-   `/port_ins/check`, `/port_ins/{id}/submit`, and porting hooks in
-   `@handset/react` (a package release).
+1. **Routing builder** — the fuller sibling of `business-hours-editor`: edit
+   `open_behavior` / `closed_behavior` too (ring targets + strategy, roll to
+   voicemail, recording policy), not just the hours.
+2. **Messaging power tools** — `message-templates` with `{{variable}}` merge,
+   `quick-replies`, and a `broadcast-composer` (send-to-many respecting
+   opt-outs). Serves appointments / recruiting / field-service directly.
 
 ## Later / exploring
 

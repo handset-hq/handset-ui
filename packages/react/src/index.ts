@@ -29,6 +29,23 @@ export {
   type UsePhoneNumberResult,
 } from "./use-numbers";
 export { usePortIn, type UsePortInOptions, type UsePortInResult } from "./use-port-in";
+export { usePorting, type UsePortingResult } from "./use-porting";
+export {
+  useRoutingConfig,
+  useRoutingConfigs,
+  type UseRoutingConfigOptions,
+  type UseRoutingConfigResult,
+  type UseRoutingConfigsOptions,
+  type UseRoutingConfigsResult,
+} from "./use-routing";
+export type {
+  RoutingConfig,
+  RoutingConfigUpdate,
+  BusinessHours,
+  Window as RoutingWindow,
+  Behavior,
+  RecordingPolicy,
+} from "./routing-types";
 export {
   useContactTimeline,
   type TimelineEvent,
@@ -64,6 +81,8 @@ export type {
   PhoneNumber,
   PortIn,
   PortInStatus,
+  PortabilityResult,
+  PortInInput,
   UsageKind,
   UsageSummary,
 } from "./number-types";

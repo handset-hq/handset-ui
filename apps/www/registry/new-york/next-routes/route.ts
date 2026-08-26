@@ -65,6 +65,17 @@ const ALLOWED: { method: string; match: (path: string) => boolean }[] = [
   // E911 emergency addresses for a tenant's numbers.
   { method: "POST", match: (p) => p === "e911_addresses" },
   { method: "GET", match: (p) => p === "e911_addresses" },
+  // Voice routing configs (business hours + ring/voicemail behavior).
+  { method: "GET", match: (p) => p === "routing_configs" },
+  { method: "GET", match: (p) => /^routing_configs\/[\w]+$/.test(p) },
+  { method: "POST", match: (p) => p === "routing_configs" },
+  { method: "PATCH", match: (p) => /^routing_configs\/[\w]+$/.test(p) },
+  // Porting: check portability, open a draft, submit or cancel it. Submitting
+  // a port commits your account — gate behind an admin check if needed.
+  { method: "POST", match: (p) => p === "port_ins/check" },
+  { method: "POST", match: (p) => p === "port_ins" },
+  { method: "POST", match: (p) => /^port_ins\/[\w]+\/submit$/.test(p) },
+  { method: "POST", match: (p) => /^port_ins\/[\w]+\/cancel$/.test(p) },
   // Softphone login tokens. Resolve WHICH web client belongs to the
   // signed-in agent in your session logic — don't let users mint tokens
   // for someone else's seat.
@@ -107,16 +118,17 @@ async function proxy(req: NextRequest, params: Promise<{ handset: string[] }>) {
   // Server-resolved tenant always wins over anything the browser sent.
   if (tenantId && req.method === "GET") url.searchParams.set("tenant_id", tenantId);
 
+  const hasBody = req.method !== "GET";
   const upstream = await fetch(url.toString(), {
     method: req.method,
     headers: {
       authorization: `Bearer ${apiKey}`,
-      ...(req.method === "POST" ? { "content-type": "application/json" } : {}),
+      ...(hasBody ? { "content-type": "application/json" } : {}),
       ...(req.headers.get("idempotency-key")
         ? { "idempotency-key": req.headers.get("idempotency-key")! }
         : {}),
     },
-    body: req.method === "POST" ? await req.text() : undefined,
+    body: hasBody ? await req.text() : undefined,
     cache: "no-store",
   });
 
@@ -132,5 +144,9 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ handset: st
 }
 
 export async function POST(req: NextRequest, ctx: { params: Promise<{ handset: string[] }> }) {
+  return proxy(req, ctx.params);
+}
+
+export async function PATCH(req: NextRequest, ctx: { params: Promise<{ handset: string[] }> }) {
   return proxy(req, ctx.params);
 }
