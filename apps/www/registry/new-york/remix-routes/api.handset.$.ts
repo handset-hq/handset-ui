@@ -73,6 +73,16 @@ const ALLOWED: { method: string; match: (path: string) => boolean }[] = [
   // E911 emergency addresses for a tenant's numbers.
   { method: "POST", match: (p) => p === "e911_addresses" },
   { method: "GET", match: (p) => p === "e911_addresses" },
+  // Voice routing configs (business hours + ring/voicemail behavior).
+  { method: "GET", match: (p) => p === "routing_configs" },
+  { method: "GET", match: (p) => /^routing_configs\/[\w]+$/.test(p) },
+  { method: "POST", match: (p) => p === "routing_configs" },
+  { method: "PATCH", match: (p) => /^routing_configs\/[\w]+$/.test(p) },
+  // Porting: check portability, open a draft, submit or cancel it.
+  { method: "POST", match: (p) => p === "port_ins/check" },
+  { method: "POST", match: (p) => p === "port_ins" },
+  { method: "POST", match: (p) => /^port_ins\/[\w]+\/submit$/.test(p) },
+  { method: "POST", match: (p) => /^port_ins\/[\w]+\/cancel$/.test(p) },
   // Softphone login tokens. Resolve WHICH web client belongs to the
   // signed-in agent in your session logic — don't let users mint tokens
   // for someone else's seat.
@@ -117,10 +127,10 @@ async function proxy({ request, params }: RouteArgs): Promise<Response> {
     method: request.method,
     headers: {
       authorization: `Bearer ${apiKey}`,
-      ...(request.method === "POST" ? { "content-type": "application/json" } : {}),
+      ...(request.method !== "GET" ? { "content-type": "application/json" } : {}),
       ...(idempotencyKey ? { "idempotency-key": idempotencyKey } : {}),
     },
-    body: request.method === "POST" ? await request.text() : undefined,
+    body: request.method !== "GET" ? await request.text() : undefined,
   });
 
   return new Response(await upstream.text(), {

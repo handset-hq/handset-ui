@@ -39,7 +39,7 @@ export class HandsetClient {
   }
 
   async request<T>(
-    method: "GET" | "POST",
+    method: "GET" | "POST" | "PATCH" | "DELETE",
     path: string,
     init: {
       query?: Record<string, string | number | undefined>;

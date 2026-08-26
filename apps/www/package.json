@@ -8,7 +8,7 @@
     "registry:build": "shadcn build"
   },
   "dependencies": {
-    "@handset/react": "^0.4.0",
+    "@handset/react": "^0.5.0",
     "@handset/webrtc": "^0.1.1",
     "@vercel/analytics": "^2.0.1",
     "clsx": "^2.1.1",

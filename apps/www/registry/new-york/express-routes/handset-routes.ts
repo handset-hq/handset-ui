@@ -71,6 +71,16 @@ const ALLOWED: { method: string; match: (path: string) => boolean }[] = [
   // E911 emergency addresses for a tenant's numbers.
   { method: "POST", match: (p) => p === "e911_addresses" },
   { method: "GET", match: (p) => p === "e911_addresses" },
+  // Voice routing configs (business hours + ring/voicemail behavior).
+  { method: "GET", match: (p) => p === "routing_configs" },
+  { method: "GET", match: (p) => /^routing_configs\/[\w]+$/.test(p) },
+  { method: "POST", match: (p) => p === "routing_configs" },
+  { method: "PATCH", match: (p) => /^routing_configs\/[\w]+$/.test(p) },
+  // Porting: check portability, open a draft, submit or cancel it.
+  { method: "POST", match: (p) => p === "port_ins/check" },
+  { method: "POST", match: (p) => p === "port_ins" },
+  { method: "POST", match: (p) => /^port_ins\/[\w]+\/submit$/.test(p) },
+  { method: "POST", match: (p) => /^port_ins\/[\w]+\/cancel$/.test(p) },
   // Softphone login tokens. Resolve WHICH web client belongs to the
   // signed-in agent in your session logic — don't let users mint tokens
   // for someone else's seat.
@@ -121,7 +131,7 @@ export function handsetRoutes(): Router {
     if (tenantId && req.method === "GET") url.searchParams.set("tenant_id", tenantId);
 
     let body: string | undefined;
-    if (req.method === "POST") {
+    if (req.method !== "GET") {
       body = typeof req.body === "string" ? req.body : JSON.stringify(req.body ?? {});
     }
 
@@ -130,7 +140,7 @@ export function handsetRoutes(): Router {
       method: req.method,
       headers: {
         authorization: `Bearer ${apiKey}`,
-        ...(req.method === "POST" ? { "content-type": "application/json" } : {}),
+        ...(req.method !== "GET" ? { "content-type": "application/json" } : {}),
         ...(idempotencyKey ? { "idempotency-key": idempotencyKey } : {}),
       },
       body,

@@ -45,6 +45,24 @@ export interface PortIn {
   created_at?: string;
 }
 
+export interface PortabilityResult {
+  phone_number: string;
+  portable: boolean;
+  reason?: string | null;
+}
+
+/** Input to open a port-in draft (camelCase; mapped to the API body). */
+export interface PortInInput {
+  tenantId: string;
+  phoneNumbers: string[];
+  entityName: string;
+  authorizedPerson: string;
+  billingPhoneNumber: string;
+  accountNumber: string;
+  pin?: string;
+  serviceAddress: { street: string; city: string; state: string; postalCode: string };
+}
+
 export type UsageKind =
   | "sms_segment_outbound"
   | "sms_segment_inbound"
