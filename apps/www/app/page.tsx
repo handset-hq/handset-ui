@@ -26,6 +26,7 @@ const GROUPS: { label: string; items: { name: string; desc: string }[] }[] = [
       { name: "thread", desc: "Message history with delivery states, opt-out handling, wired composer." },
       { name: "composer", desc: "Draft box with live SMS segment counting and unicode detection." },
       { name: "broadcast-composer", desc: "One message to many, one call each — opt-outs handled per recipient." },
+      { name: "scheduled-composer", desc: "Send now or schedule for later — real server-side send_at." },
       { name: "message-templates", desc: "Saved messages with {{variable}} merge, previewed before you send." },
       { name: "quiet-hours", desc: "A sending-window guard — no texting people at 2am." },
       { name: "opt-in-form", desc: "Consent UI whose exact shape passed a real carrier review." },

@@ -10,12 +10,12 @@ export default function DeliverabilityPanelDocs() {
     <article>
       <DocHeader
         title="Deliverability panel"
-        lead="Outbound delivery health from the last N messages: the delivery rate, in-flight count, and a breakdown of why sends failed. A live pulse for a support view or an ops sidebar."
+        lead="Outbound delivery health over a window: delivery rate, status counts, and a breakdown of why sends failed. Served by the API's GET /messages/stats, so the aggregation is server-side — accurate over any window, not a client-side sample."
       />
 
       <Preview height={320}>
         <div className="w-full max-w-md">
-          <DeliverabilityPanel limit={200} />
+          <DeliverabilityPanel />
         </div>
       </Preview>
 
@@ -27,14 +27,14 @@ export default function DeliverabilityPanelDocs() {
         <CodeBlock
           code={`import { DeliverabilityPanel } from "@/components/handset/deliverability-panel";
 
-<DeliverabilityPanel tenantId={tenant.id} limit={200} />`}
+<DeliverabilityPanel tenantId={tenant.id} start="2026-08-01" />`}
         />
         <p>
-          The Handset API has no stats endpoint, so this aggregates a recent sample of <InlineCode>/messages</InlineCode>{" "}
-          client-side. That makes it a live health check, not a billing-grade report — for exact numbers over long
-          windows, roll the data up in your own backend. Failure reasons are the API&apos;s{" "}
-          <InlineCode>error_code</InlineCode>s (<InlineCode>recipient_opted_out</InlineCode>,{" "}
-          <InlineCode>carrier_rejected</InlineCode>, …).
+          Reads <InlineCode>GET /messages/stats</InlineCode> through your proxy. The window defaults to the last 30 days
+          server-side; pass <InlineCode>start</InlineCode> / <InlineCode>end</InlineCode> (RFC 3339 or YYYY-MM-DD) to
+          change it. <InlineCode>delivery_rate</InlineCode> is delivered / (delivered + failed); in-flight messages
+          (<InlineCode>sent</InlineCode>, <InlineCode>pending</InlineCode>) are shown but excluded from that ratio.
+          Failure reasons are the API&apos;s <InlineCode>error_code</InlineCode>s.
         </p>
       </DocSection>
 
@@ -42,7 +42,7 @@ export default function DeliverabilityPanelDocs() {
         <PropsTable
           rows={[
             { name: "tenantId", type: "string", description: "Scope to one tenant's messages." },
-            { name: "limit", type: "number", default: "200", description: "How many recent messages to sample." },
+            { name: "start / end", type: "string", description: "Window bounds (RFC 3339 or YYYY-MM-DD). Default: last 30 days." },
             { name: "className", type: "string", description: "Merged onto the root card." },
           ]}
         />

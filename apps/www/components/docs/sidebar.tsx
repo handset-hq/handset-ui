@@ -38,6 +38,7 @@ export const DOCS_NAV = [
       { title: "Quick replies", href: "/docs/components/quick-replies" },
       { title: "Message templates", href: "/docs/components/message-templates" },
       { title: "Broadcast composer", href: "/docs/components/broadcast-composer" },
+      { title: "Scheduled composer", href: "/docs/components/scheduled-composer" },
       { title: "Quiet hours", href: "/docs/components/quiet-hours" },
       { title: "Voicemail player", href: "/docs/components/voicemail-player" },
       { title: "Voicemail inbox", href: "/docs/components/voicemail-inbox" },
