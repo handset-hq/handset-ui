@@ -1,25 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { useHandsetClient } from "@handset/react";
+import { useBrand, useCampaign, type Campaign } from "@handset/react";
 import { AlertCircle, Check, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface Registration {
-  id: string;
-  status: string;
-  rejection_reason?: string | null;
-  legal_name?: string;
-  use_case?: string;
-  throughput?: { messages_per_minute?: number | null; daily_cap?: number | null };
-}
 
 export interface ComplianceStatusProps {
   /** A brand id (brd_…) to track. */
   brandId?: string;
   /** A campaign id (cmp_…) to track. */
   campaignId?: string;
-  /** Poll interval while anything is still pending. 0 disables polling. */
+  /** Poll interval while pending. 0 fetches once. Polling stops when settled. */
   pollMs?: number;
   className?: string;
 }
@@ -27,23 +18,36 @@ export interface ComplianceStatusProps {
 /**
  * Tracks 10DLC brand and/or campaign approval: a status badge, the carrier's
  * rejection reason when rejected, and assigned throughput once a campaign is
- * approved. Polls while anything is pending and stops when everything settles.
+ * approved. Built on useBrand / useCampaign, which poll while pending and stop
+ * once everything settles.
  */
 export function ComplianceStatus({ brandId, campaignId, pollMs = 15000, className }: ComplianceStatusProps) {
-  const brand = useRegistration("brands", brandId, pollMs);
-  const campaign = useRegistration("campaigns", campaignId, pollMs);
+  const { brand, isLoading: brandLoading, error: brandError } = useBrand(brandId ?? null, { pollMs });
+  const { campaign, isLoading: campaignLoading, error: campaignError } = useCampaign(campaignId ?? null, { pollMs });
 
   if (!brandId && !campaignId) return null;
 
   return (
     <div className={cn("divide-y rounded-lg border", className)}>
-      {brandId ? <Row label="Brand" title={brand.data?.legal_name} row={brand} /> : null}
+      {brandId ? (
+        <Row
+          label="Brand"
+          title={brand?.legal_name}
+          status={brand?.status}
+          rejection={brand?.rejection_reason}
+          loading={brandLoading && !brand}
+          error={brandError}
+        />
+      ) : null}
       {campaignId ? (
         <Row
           label="Campaign"
-          title={campaign.data?.use_case?.replace(/_/g, " ")}
-          row={campaign}
-          detail={approvedThroughput(campaign.data)}
+          title={campaign?.use_case?.replace(/_/g, " ")}
+          status={campaign?.status}
+          rejection={campaign?.rejection_reason}
+          loading={campaignLoading && !campaign}
+          error={campaignError}
+          detail={approvedThroughput(campaign)}
         />
       ) : null}
     </div>
@@ -53,15 +57,20 @@ export function ComplianceStatus({ brandId, campaignId, pollMs = 15000, classNam
 function Row({
   label,
   title,
-  row,
+  status,
+  rejection,
+  loading,
+  error,
   detail,
 }: {
   label: string;
   title?: string;
-  row: { data: Registration | null; error: string | null; loading: boolean };
+  status?: string;
+  rejection?: string | null;
+  loading: boolean;
+  error: Error | null;
   detail?: string;
 }) {
-  const status = row.data?.status;
   const tone = statusTone(status);
   return (
     <div className="flex items-start gap-3 p-4">
@@ -73,14 +82,12 @@ function Row({
             {title ? <span className="ml-1.5 font-normal capitalize text-muted-foreground">{title}</span> : null}
           </p>
           <span className={cn("shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium", badgeCls(tone))}>
-            {row.loading && !row.data ? "Loading…" : status ?? (row.error ? "Error" : "—")}
+            {loading ? "Loading…" : status ?? (error ? "Error" : "—")}
           </span>
         </div>
-        {row.data?.rejection_reason ? (
-          <p className="mt-1 text-xs text-destructive">{row.data.rejection_reason}</p>
-        ) : null}
+        {rejection ? <p className="mt-1 text-xs text-destructive">{rejection}</p> : null}
         {detail ? <p className="mt-1 text-xs text-muted-foreground">{detail}</p> : null}
-        {row.error && !row.data ? <p className="mt-1 text-xs text-destructive">{row.error}</p> : null}
+        {error && !status ? <p className="mt-1 text-xs text-destructive">{error.message}</p> : null}
       </div>
     </div>
   );
@@ -108,47 +115,10 @@ function badgeCls(tone: Tone): string {
   return "bg-muted text-muted-foreground";
 }
 
-function approvedThroughput(c: Registration | null): string | undefined {
+function approvedThroughput(c: Campaign | null): string | undefined {
   if (!c || statusTone(c.status) !== "approved" || !c.throughput) return undefined;
   const parts: string[] = [];
   if (c.throughput.messages_per_minute != null) parts.push(`${c.throughput.messages_per_minute}/min`);
   if (c.throughput.daily_cap != null) parts.push(`${c.throughput.daily_cap.toLocaleString()}/day`);
   return parts.length ? `Assigned throughput: ${parts.join(" · ")}` : undefined;
-}
-
-function useRegistration(collection: "brands" | "campaigns", id: string | undefined, pollMs: number) {
-  const client = useHandsetClient();
-  const [data, setData] = React.useState<Registration | null>(null);
-  const [error, setError] = React.useState<string | null>(null);
-  const [loading, setLoading] = React.useState(Boolean(id));
-
-  React.useEffect(() => {
-    if (!id) return;
-    let alive = true;
-    let timer: ReturnType<typeof setTimeout> | undefined;
-
-    const tick = async () => {
-      try {
-        const r = await client.request<Registration>("GET", `/${collection}/${id}`);
-        if (!alive) return;
-        setData(r);
-        setError(null);
-        setLoading(false);
-        if (pollMs > 0 && statusTone(r.status) === "pending") timer = setTimeout(tick, pollMs);
-      } catch (err) {
-        if (!alive) return;
-        setError(err instanceof Error ? err.message : "Could not load status.");
-        setLoading(false);
-        if (pollMs > 0) timer = setTimeout(tick, pollMs);
-      }
-    };
-
-    tick();
-    return () => {
-      alive = false;
-      if (timer) clearTimeout(timer);
-    };
-  }, [client, collection, id, pollMs]);
-
-  return { data, error, loading };
 }

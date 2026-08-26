@@ -36,6 +36,29 @@ export {
   type UseContactTimelineResult,
 } from "./use-contact-timeline";
 export { useUsage, type UseUsageOptions, type UseUsageResult } from "./use-usage";
+export {
+  useCompliance,
+  useBrand,
+  useCampaign,
+  type UseComplianceResult,
+  type UseBrandOptions,
+  type UseBrandResult,
+  type UseCampaignOptions,
+  type UseCampaignResult,
+} from "./use-compliance";
+export {
+  complianceSettled,
+  type ComplianceStatus,
+  type Brand,
+  type BrandEntityType,
+  type BrandRegistration,
+  type Campaign,
+  type CampaignUseCase,
+  type CampaignThroughput,
+  type CampaignRegistration,
+  type E911Address,
+  type E911Registration,
+} from "./compliance-types";
 export type {
   AvailableNumber,
   PhoneNumber,

@@ -1,6 +1,6 @@
 {
   "name": "@handset/react",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Headless React hooks for building messaging UI on the Handset API. Powers Handset UI (https://github.com/handset-hq/handset-ui).",
   "license": "MIT",
   "repository": {
@@ -9,7 +9,14 @@
     "directory": "packages/react"
   },
   "homepage": "https://ui.handset.dev",
-  "keywords": ["handset", "sms", "messaging", "react", "hooks", "telecom"],
+  "keywords": [
+    "handset",
+    "sms",
+    "messaging",
+    "react",
+    "hooks",
+    "telecom"
+  ],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -21,7 +28,10 @@
       "require": "./dist/index.cjs"
     }
   },
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts --clean",
