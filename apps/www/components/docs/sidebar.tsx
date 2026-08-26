@@ -75,6 +75,7 @@ export const DOCS_NAV = [
       { title: "Voice hooks", href: "/docs/hooks/voice" },
       { title: "Number & usage hooks", href: "/docs/hooks/numbers" },
       { title: "Compliance hooks", href: "/docs/hooks/compliance" },
+      { title: "Routing & porting hooks", href: "/docs/hooks/routing" },
     ],
   },
 ] as const;
