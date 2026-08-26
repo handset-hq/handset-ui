@@ -161,6 +161,26 @@
       ]
     },
     {
+      "name": "voicemail-inbox",
+      "type": "registry:component",
+      "title": "Voicemail inbox",
+      "description": "A voicemail list with unread tracking and the full player inline on the open row.",
+      "dependencies": [
+        "@handset/react",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@handset/voicemail-player"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/voicemail-inbox/voicemail-inbox.tsx",
+          "type": "registry:component",
+          "target": "components/handset/voicemail-inbox.tsx"
+        }
+      ]
+    },
+    {
       "name": "click-to-call-button",
       "type": "registry:component",
       "title": "Click-to-call button",
@@ -392,6 +412,22 @@
           "path": "registry/new-york/usage-meter/usage-meter.tsx",
           "type": "registry:component",
           "target": "components/handset/usage-meter.tsx"
+        }
+      ]
+    },
+    {
+      "name": "event-log",
+      "type": "registry:component",
+      "title": "Event log",
+      "description": "A live realtime event inspector: envelopes newest-first, filterable by type, raw payload expandable per row.",
+      "dependencies": [
+        "@handset/react"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/event-log/event-log.tsx",
+          "type": "registry:component",
+          "target": "components/handset/event-log.tsx"
         }
       ]
     },

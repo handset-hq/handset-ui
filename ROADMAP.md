@@ -19,9 +19,8 @@ its own to build a custom conversation view.
 **Voice** — `click-to-call-button`, `call-log` (expanded rows show the AI
 call summary, keypad interactions, and transcript), `call-transcript`
 (live-poll), `call-keypad` (gather prompts + answered digits, loose
-keypresses, sent DTMF — also inside `contact-timeline`), `agent-assist`
-(finds the active call by number, starts on-demand transcription, streams
-the conversation live, AI summary after hangup), `voicemail-player`.
+keypresses, sent DTMF — also inside `contact-timeline`), `voicemail-player`,
+`voicemail-inbox` (list + unread, player inline on the open row).
 
 **MMS** — `composer` attachments via `onPickAttachment` (chips, per-message
 MMS footer, ≤10 URLs), image bubbles in `thread`, `media_urls` end to end.
@@ -39,11 +38,15 @@ rejection reason, assigned throughput; polls while pending). The proxy
 routes now expose `POST /brands`, `/campaigns`, `/e911_addresses` and the
 matching reads.
 
-**Blocks & plumbing** — `contact-timeline` (per-contact merge of
-conversations, calls, voicemails), `phone-system` (3-tab mega-block),
-`next-routes` / `express-routes` / `remix-routes` (the server proxy that
-keeps your API key off the client, for Next.js, Express, and
-Remix / React Router 7).
+**Blocks & plumbing** — `agent-assist` (finds the active call by number,
+starts on-demand transcription, streams the conversation live, AI summary
+after hangup), `contact-timeline` (per-contact merge of conversations,
+calls, voicemails), `phone-system` (3-tab mega-block), `next-routes` /
+`express-routes` / `remix-routes` (the server proxy that keeps your API key
+off the client, for Next.js, Express, and Remix / React Router 7).
+
+**Observability** — `event-log` (live realtime event inspector, filterable,
+raw payload per row — dogfoods `useHandsetEvents`).
 
 **Realtime** — `<HandsetProvider realtime>` connects the browser to the
 event stream (`wss://media.handset.dev/v1/events`, short-lived tokens via
@@ -51,7 +54,8 @@ your proxy): hooks refetch the instant events happen and polling drops to
 a 60s safety net. `useHandsetEvents` exposes the raw stream.
 
 **Packages** — [`@handset/react`](https://www.npmjs.com/package/@handset/react)
-(headless hooks) and [`@handset/webrtc`](https://www.npmjs.com/package/@handset/webrtc)
+(headless hooks; 0.4.0 adds `useCompliance` / `useBrand` / `useCampaign`) and
+[`@handset/webrtc`](https://www.npmjs.com/package/@handset/webrtc)
 (carrier-agnostic softphone core).
 
 ## Next
@@ -60,11 +64,14 @@ Prioritized by capability-to-UI gap — the Handset API supports each of these
 today with no component to drive it.
 
 1. **Voice routing** — `business-hours-editor` (weekly schedule + timezone per
-   business) and `voicemail-inbox` (list + unread wrapping `voicemail-player`).
+   business). Hours live inside a `routing_config` document (`POST/PATCH
+   /routing_configs`), which also carries `open_behavior` / `closed_behavior`,
+   so this needs proxy routes for `routing_configs` and a scope decision
+   (hours-only vs the fuller routing editor).
 2. **Porting** — `port-in-wizard` (the create/submit flow; we ship `port-status`
-   for viewing only).
-3. **Observability** — `event-log` / `webhook-inspector` dogfooding
-   `useHandsetEvents`; doubles as the debugger the docs describe.
+   for viewing only). Needs proxy routes for `POST /port_ins`,
+   `/port_ins/check`, `/port_ins/{id}/submit`, and porting hooks in
+   `@handset/react` (a package release).
 
 ## Later / exploring
 
