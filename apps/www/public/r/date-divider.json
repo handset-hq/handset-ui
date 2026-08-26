@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-divider",
+  "title": "Date divider",
+  "description": "A centered day label between message groups: Today, Yesterday, weekday, or short date.",
+  "files": [
+    {
+      "path": "registry/new-york/date-divider/date-divider.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface DateDividerProps {\n  date: string | Date;\n  className?: string;\n}\n\n/**\n * A centered day label between message groups: \"Today\", \"Yesterday\", a weekday\n * name within the last week, then a short date (with year if not this year).\n */\nexport function DateDivider({ date, className }: DateDividerProps) {\n  return (\n    <div className={cn(\"flex items-center justify-center py-2\", className)}>\n      <span className=\"rounded-full bg-muted px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground\">\n        {formatDayLabel(date)}\n      </span>\n    </div>\n  );\n}\n\n/** \"Today\" / \"Yesterday\" / \"Monday\" / \"Mar 4\" / \"Mar 4, 2024\". */\nexport function formatDayLabel(input: string | Date): string {\n  const date = typeof input === \"string\" ? new Date(input) : input;\n  const now = new Date();\n  const startOfDay = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();\n  const diffDays = Math.round((startOfDay(now) - startOfDay(date)) / 86_400_000);\n  if (diffDays === 0) return \"Today\";\n  if (diffDays === 1) return \"Yesterday\";\n  if (diffDays > 1 && diffDays < 7) return date.toLocaleDateString(undefined, { weekday: \"long\" });\n  const sameYear = date.getFullYear() === now.getFullYear();\n  return date.toLocaleDateString(undefined, {\n    month: \"short\",\n    day: \"numeric\",\n    ...(sameYear ? {} : { year: \"numeric\" }),\n  });\n}\n\n/** True when both timestamps fall on the same calendar day. */\nexport function isSameDay(a: string | Date, b: string | Date): boolean {\n  const da = typeof a === \"string\" ? new Date(a) : a;\n  const db = typeof b === \"string\" ? new Date(b) : b;\n  return da.toDateString() === db.toDateString();\n}\n",
+      "type": "registry:component",
+      "target": "components/handset/date-divider.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

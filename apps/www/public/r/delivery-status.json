@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "delivery-status",
+  "title": "Delivery status",
+  "description": "The queued/sent/delivered/failed indicator for an outbound message.",
+  "dependencies": [
+    "@handset/react",
+    "lucide-react"
+  ],
+  "files": [
+    {
+      "path": "registry/new-york/delivery-status/delivery-status.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { AlertCircle, Check, CheckCheck, Clock } from \"lucide-react\";\nimport type { MessageStatus } from \"@handset/react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface DeliveryStatusProps {\n  status: MessageStatus;\n  className?: string;\n}\n\n/**\n * The delivery-state indicator for an outbound message: clock while sending,\n * one check when accepted, two when delivered, a red alert on failure.\n * Inbound / received messages render nothing.\n */\nexport function DeliveryStatus({ status, className }: DeliveryStatusProps) {\n  switch (status) {\n    case \"queued\":\n    case \"sending\":\n      return <Clock className={cn(\"h-3 w-3\", className)} aria-label=\"Sending\" />;\n    case \"sent\":\n      return <Check className={cn(\"h-3 w-3\", className)} aria-label=\"Sent\" />;\n    case \"delivered\":\n      return <CheckCheck className={cn(\"h-3 w-3\", className)} aria-label=\"Delivered\" />;\n    case \"failed\":\n      return <AlertCircle className={cn(\"h-3 w-3 text-destructive\", className)} aria-label=\"Failed\" />;\n    default:\n      return null;\n  }\n}\n",
+      "type": "registry:component",
+      "target": "components/handset/delivery-status.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

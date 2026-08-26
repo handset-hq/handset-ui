@@ -10,6 +10,12 @@ if your use case should reorder this list.
 optimistic send), `messaging` (two-pane block), `opt-in-form`,
 `texting-readiness`.
 
+**Messaging primitives** — `message-bubble`, `delivery-status`,
+`message-group` (iMessage-style same-side clustering), `date-divider`
+(Today / Yesterday / weekday / short date). Extracted from `thread`, which
+now composes them and inserts day dividers automatically. Install any one on
+its own to build a custom conversation view.
+
 **Voice** — `click-to-call-button`, `call-log` (expanded rows show the AI
 call summary, keypad interactions, and transcript), `call-transcript`
 (live-poll), `call-keypad` (gather prompts + answered digits, loose
@@ -44,8 +50,27 @@ a 60s safety net. `useHandsetEvents` exposes the raw stream.
 
 ## Next
 
+Prioritized by capability-to-UI gap — the Handset API supports each of these
+today with no component to drive it.
+
+1. **Compliance forms** — `brand-registration-form`, `campaign-registration-form`,
+   `e911-address-form`, and a `compliance-status` tracker (brand + campaign
+   approval, pending/approved/rejected with the rejection reason). Biggest gap:
+   the registration endpoints exist, the onboarding UI does not.
+2. **Voice routing** — `business-hours-editor` (weekly schedule + timezone per
+   business) and `voicemail-inbox` (list + unread wrapping `voicemail-player`).
+3. **Porting** — `port-in-wizard` (the create/submit flow; we ship `port-status`
+   for viewing only).
+4. **Observability** — `event-log` / `webhook-inspector` dogfooding
+   `useHandsetEvents`; doubles as the debugger the docs describe.
 
 ## Later / exploring
+
+- `message-templates` with `{{variable}}` merge, `quick-replies`, and a
+  `broadcast-composer` (send-to-many that respects opt-outs).
+- `usage-dashboard` (messages/minutes/spend over time) and a
+  `deliverability-panel` (failure-reason breakdown), beyond the single
+  `usage-meter`.
 
 - Scheduled send + quiet-hours awareness in `composer`.
 - Theming presets showing the components under contrasting design systems.

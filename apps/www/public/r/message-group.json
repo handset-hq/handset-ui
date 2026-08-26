@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "message-group",
+  "title": "Message group",
+  "description": "A run of consecutive same-direction messages, stacked tightly with a single timestamp on the last bubble.",
+  "dependencies": [
+    "@handset/react"
+  ],
+  "registryDependencies": [
+    "@handset/message-bubble"
+  ],
+  "files": [
+    {
+      "path": "registry/new-york/message-group/message-group.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport type { OutgoingMessage } from \"@handset/react\";\nimport { cn } from \"@/lib/utils\";\nimport { MessageBubble } from \"@/components/handset/message-bubble\";\n\nexport interface MessageGroupProps {\n  /** Consecutive messages from the same side, in chronological order. */\n  messages: OutgoingMessage[];\n  className?: string;\n}\n\n/**\n * A run of consecutive same-direction messages, stacked tightly with a single\n * timestamp + delivery line on the last bubble (iMessage-style grouping).\n */\nexport function MessageGroup({ messages, className }: MessageGroupProps) {\n  if (messages.length === 0) return null;\n  const last = messages.length - 1;\n  return (\n    <div className={cn(\"space-y-0.5\", className)}>\n      {messages.map((m, i) => (\n        <MessageBubble key={m.id} message={m} hideMeta={i !== last} />\n      ))}\n    </div>\n  );\n}\n\n/** Split a flat, chronological message list into same-direction runs. */\nexport function groupMessages(messages: OutgoingMessage[]): OutgoingMessage[][] {\n  const groups: OutgoingMessage[][] = [];\n  for (const m of messages) {\n    const current = groups[groups.length - 1];\n    if (current && current[0].direction === m.direction) current.push(m);\n    else groups.push([m]);\n  }\n  return groups;\n}\n",
+      "type": "registry:component",
+      "target": "components/handset/message-group.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

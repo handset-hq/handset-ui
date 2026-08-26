@@ -30,13 +30,83 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@handset/composer"
+        "@handset/composer",
+        "@handset/message-group",
+        "@handset/date-divider"
       ],
       "files": [
         {
           "path": "registry/new-york/thread/thread.tsx",
           "type": "registry:component",
           "target": "components/handset/thread.tsx"
+        }
+      ]
+    },
+    {
+      "name": "delivery-status",
+      "type": "registry:component",
+      "title": "Delivery status",
+      "description": "The queued/sent/delivered/failed indicator for an outbound message.",
+      "dependencies": [
+        "@handset/react",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/delivery-status/delivery-status.tsx",
+          "type": "registry:component",
+          "target": "components/handset/delivery-status.tsx"
+        }
+      ]
+    },
+    {
+      "name": "message-bubble",
+      "type": "registry:component",
+      "title": "Message bubble",
+      "description": "A single SMS/MMS bubble: direction alignment, media previews, optimistic pending state, timestamp and delivery status.",
+      "dependencies": [
+        "@handset/react"
+      ],
+      "registryDependencies": [
+        "@handset/delivery-status"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/message-bubble/message-bubble.tsx",
+          "type": "registry:component",
+          "target": "components/handset/message-bubble.tsx"
+        }
+      ]
+    },
+    {
+      "name": "date-divider",
+      "type": "registry:component",
+      "title": "Date divider",
+      "description": "A centered day label between message groups: Today, Yesterday, weekday, or short date.",
+      "files": [
+        {
+          "path": "registry/new-york/date-divider/date-divider.tsx",
+          "type": "registry:component",
+          "target": "components/handset/date-divider.tsx"
+        }
+      ]
+    },
+    {
+      "name": "message-group",
+      "type": "registry:component",
+      "title": "Message group",
+      "description": "A run of consecutive same-direction messages, stacked tightly with a single timestamp on the last bubble.",
+      "dependencies": [
+        "@handset/react"
+      ],
+      "registryDependencies": [
+        "@handset/message-bubble"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/message-group/message-group.tsx",
+          "type": "registry:component",
+          "target": "components/handset/message-group.tsx"
         }
       ]
     },
