@@ -2,9 +2,10 @@
 
 import * as React from "react";
 import { useThread, type OutgoingMessage, type UseThreadOptions } from "@handset/react";
-import { AlertCircle, Check, CheckCheck, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Composer } from "@/components/handset/composer";
+import { MessageGroup } from "@/components/handset/message-group";
+import { DateDivider, isSameDay } from "@/components/handset/date-divider";
 
 export interface ThreadProps extends UseThreadOptions {
   conversationId: string | null;
@@ -43,7 +44,7 @@ export function Thread({ conversationId, className, hideComposer, ...options }: 
         {thread.isLoading && thread.messages.length === 0 ? (
           <ThreadSkeleton />
         ) : (
-          thread.messages.map((message) => <MessageBubble key={message.id} message={message} />)
+          renderTimeline(thread.messages)
         )}
         {thread.error && thread.messages.length === 0 ? (
           <p className="text-center text-sm text-destructive">{thread.error.message}</p>
@@ -59,50 +60,35 @@ export function Thread({ conversationId, className, hideComposer, ...options }: 
   );
 }
 
-function MessageBubble({ message }: { message: OutgoingMessage }) {
-  const outbound = message.direction === "outbound";
-  return (
-    <div className={cn("flex", outbound ? "justify-end" : "justify-start")}>
-      <div
-        className={cn(
-          "max-w-[75%] rounded-2xl px-3.5 py-2 text-sm",
-          outbound ? "rounded-br-sm bg-primary text-primary-foreground" : "rounded-bl-sm bg-muted",
-          message.pending && "opacity-70",
-        )}
-      >
-        {message.media_urls?.map((url) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img key={url} src={url} alt="MMS attachment" className="mb-1 max-h-64 rounded-lg" />
-        ))}
-        {message.body ? <p className="whitespace-pre-wrap break-words">{message.body}</p> : null}
-        <span
-          className={cn(
-            "mt-0.5 flex items-center justify-end gap-1 text-[10px] tabular-nums",
-            outbound ? "text-primary-foreground/70" : "text-muted-foreground",
-          )}
-        >
-          {formatTime(message.created_at)}
-          {outbound ? <StatusIcon status={message.status} /> : null}
-        </span>
-      </div>
-    </div>
-  );
-}
+/**
+ * Walk a flat, chronological message list into rendered rows: a DateDivider
+ * whenever the calendar day changes, and a MessageGroup for each run of
+ * consecutive same-direction messages within a day.
+ */
+function renderTimeline(messages: OutgoingMessage[]): React.ReactNode[] {
+  const rows: React.ReactNode[] = [];
+  let run: OutgoingMessage[] = [];
+  let prev: OutgoingMessage | null = null;
 
-function StatusIcon({ status }: { status: OutgoingMessage["status"] }) {
-  switch (status) {
-    case "queued":
-    case "sending":
-      return <Clock className="h-3 w-3" aria-label="Sending" />;
-    case "sent":
-      return <Check className="h-3 w-3" aria-label="Sent" />;
-    case "delivered":
-      return <CheckCheck className="h-3 w-3" aria-label="Delivered" />;
-    case "failed":
-      return <AlertCircle className="h-3 w-3 text-destructive" aria-label="Failed" />;
-    default:
-      return null;
+  const flush = () => {
+    if (run.length) {
+      rows.push(<MessageGroup key={run[0].id} messages={run} />);
+      run = [];
+    }
+  };
+
+  for (const m of messages) {
+    if (!prev || !isSameDay(prev.created_at, m.created_at)) {
+      flush();
+      rows.push(<DateDivider key={`divider-${m.id}`} date={m.created_at} />);
+    } else if (prev.direction !== m.direction) {
+      flush();
+    }
+    run.push(m);
+    prev = m;
   }
+  flush();
+  return rows;
 }
 
 function ThreadSkeleton() {
@@ -115,12 +101,4 @@ function ThreadSkeleton() {
       ))}
     </div>
   );
-}
-
-function formatTime(iso: string): string {
-  const date = new Date(iso);
-  const now = new Date();
-  const sameDay = date.toDateString() === now.toDateString();
-  if (sameDay) return date.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
-  return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }
