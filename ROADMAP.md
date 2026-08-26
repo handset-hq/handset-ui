@@ -31,7 +31,13 @@ MMS footer, ≤10 URLs), image bubbles in `thread`, `media_urls` end to end.
 `incoming-call-toast`, `softphone` (browser calling via `@handset/webrtc`,
 with generated ringtone).
 
-**Numbers & compliance** — `number-picker`, `port-status`, `usage-meter`.
+**Numbers & compliance** — `number-picker`, `port-status`, `usage-meter`,
+`brand-registration-form`, `campaign-registration-form`, `e911-address-form`
+(10DLC + E911 registration, validated client-side and POSTed through your
+proxy), `compliance-status` (brand + campaign approval tracker: badge,
+rejection reason, assigned throughput; polls while pending). The proxy
+routes now expose `POST /brands`, `/campaigns`, `/e911_addresses` and the
+matching reads.
 
 **Blocks & plumbing** — `contact-timeline` (per-contact merge of
 conversations, calls, voicemails), `phone-system` (3-tab mega-block),
@@ -53,15 +59,11 @@ a 60s safety net. `useHandsetEvents` exposes the raw stream.
 Prioritized by capability-to-UI gap — the Handset API supports each of these
 today with no component to drive it.
 
-1. **Compliance forms** — `brand-registration-form`, `campaign-registration-form`,
-   `e911-address-form`, and a `compliance-status` tracker (brand + campaign
-   approval, pending/approved/rejected with the rejection reason). Biggest gap:
-   the registration endpoints exist, the onboarding UI does not.
-2. **Voice routing** — `business-hours-editor` (weekly schedule + timezone per
+1. **Voice routing** — `business-hours-editor` (weekly schedule + timezone per
    business) and `voicemail-inbox` (list + unread wrapping `voicemail-player`).
-3. **Porting** — `port-in-wizard` (the create/submit flow; we ship `port-status`
+2. **Porting** — `port-in-wizard` (the create/submit flow; we ship `port-status`
    for viewing only).
-4. **Observability** — `event-log` / `webhook-inspector` dogfooding
+3. **Observability** — `event-log` / `webhook-inspector` dogfooding
    `useHandsetEvents`; doubles as the debugger the docs describe.
 
 ## Later / exploring

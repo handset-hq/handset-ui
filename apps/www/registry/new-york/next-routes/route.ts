@@ -53,6 +53,18 @@ const ALLOWED: { method: string; match: (path: string) => boolean }[] = [
   { method: "POST", match: (p) => p === "phone_numbers" },
   { method: "GET", match: (p) => /^port_ins\/[\w]+$/.test(p) },
   { method: "GET", match: (p) => p === "usage" },
+  // 10DLC compliance: register brands & campaigns and read their approval
+  // status. Registration bills/commits your account — gate these behind an
+  // admin check in resolveTenantId if end users shouldn't self-register.
+  { method: "POST", match: (p) => p === "brands" },
+  { method: "GET", match: (p) => p === "brands" },
+  { method: "GET", match: (p) => /^brands\/[\w]+$/.test(p) },
+  { method: "POST", match: (p) => p === "campaigns" },
+  { method: "GET", match: (p) => p === "campaigns" },
+  { method: "GET", match: (p) => /^campaigns\/[\w]+$/.test(p) },
+  // E911 emergency addresses for a tenant's numbers.
+  { method: "POST", match: (p) => p === "e911_addresses" },
+  { method: "GET", match: (p) => p === "e911_addresses" },
   // Softphone login tokens. Resolve WHICH web client belongs to the
   // signed-in agent in your session logic — don't let users mint tokens
   // for someone else's seat.

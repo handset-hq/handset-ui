@@ -163,6 +163,12 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ handset: s
       ],
     });
   }
+  if (resource === "brands" && id) {
+    return NextResponse.json(demoBrand(id));
+  }
+  if (resource === "campaigns" && id) {
+    return NextResponse.json(demoCampaign(id));
+  }
   if (resource === "demo-audio") {
     return new NextResponse(new Uint8Array(demoWav()), {
       headers: { "content-type": "audio/wav", "cache-control": "public, max-age=3600" },
@@ -170,6 +176,39 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ handset: s
   }
   return NextResponse.json({ error: { code: "not_found", message: "Unknown route" } }, { status: 404 });
 }
+
+// ---------- compliance demo data ----------
+
+function demoBrand(id: string) {
+  return {
+    id,
+    legal_name: "Bayview Dental LLC",
+    ein: "**-***6789",
+    entity_type: "private_company",
+    contact_email: "ops@bayviewdental.com",
+    status: "approved",
+    rejection_reason: null,
+    created_at: minutesAgo(60 * 24 * 3),
+  };
+}
+
+function demoCampaign(id: string) {
+  return {
+    id,
+    tenant_id: "tnt_demo",
+    brand_id: "brd_demo",
+    use_case: "appointment_reminders",
+    description: "Appointment reminders and reschedule links for patients who booked with the practice.",
+    sample_messages: ["Your appointment with Dr. Lee is tomorrow at 2:00 PM. Reply C to confirm."],
+    opt_in_description: "Patients check a consent box on the booking form and agree to appointment texts.",
+    status: "pending",
+    rejection_reason: null,
+    throughput: { messages_per_minute: null, daily_cap: null },
+    created_at: minutesAgo(60 * 20),
+  };
+}
+
+const lastFour = (ein: string) => String(ein).replace(/\D/g, "").slice(-4).padStart(4, "*");
 
 // ---------- numbers / porting demo data ----------
 
@@ -454,6 +493,30 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ handset: s
     };
     phoneNumbers.push(num);
     return NextResponse.json(materializeNumber(num), { status: 201 });
+  }
+  if (handset[0] === "brands") {
+    const b = (await req.json()) as Record<string, string>;
+    counter += 1;
+    return NextResponse.json(
+      { id: `brd_demo_${counter}`, legal_name: b.legal_name, ein: `**-***${lastFour(b.ein)}`, entity_type: b.entity_type, contact_email: b.contact_email, status: "pending", rejection_reason: null, created_at: new Date().toISOString() },
+      { status: 201 },
+    );
+  }
+  if (handset[0] === "campaigns") {
+    const c = (await req.json()) as Record<string, unknown>;
+    counter += 1;
+    return NextResponse.json(
+      { id: `cmp_demo_${counter}`, tenant_id: c.tenant_id, brand_id: c.brand_id, use_case: c.use_case, description: c.description, sample_messages: c.sample_messages, opt_in_description: c.opt_in_description, status: "pending", rejection_reason: null, throughput: { messages_per_minute: null, daily_cap: null }, created_at: new Date().toISOString() },
+      { status: 201 },
+    );
+  }
+  if (handset[0] === "e911_addresses") {
+    const a = (await req.json()) as Record<string, string>;
+    counter += 1;
+    return NextResponse.json(
+      { id: `e911_demo_${counter}`, tenant_id: a.tenant_id, street: a.street, unit: a.unit ?? null, city: a.city, state: a.state, postal_code: a.postal_code, status: "pending", created_at: new Date().toISOString() },
+      { status: 201 },
+    );
   }
   if (handset[0] !== "messages") {
     return NextResponse.json({ error: { code: "not_found", message: "Unknown route" } }, { status: 404 });
