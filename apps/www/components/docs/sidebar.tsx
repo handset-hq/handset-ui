@@ -70,6 +70,7 @@ export const DOCS_NAV = [
       { title: "useComposer", href: "/docs/hooks/use-composer" },
       { title: "Voice hooks", href: "/docs/hooks/voice" },
       { title: "Number & usage hooks", href: "/docs/hooks/numbers" },
+      { title: "Compliance hooks", href: "/docs/hooks/compliance" },
     ],
   },
 ] as const;

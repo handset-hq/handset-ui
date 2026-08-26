@@ -17,7 +17,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
             <span className="text-sm font-semibold tracking-tight text-primary">UI</span>
           </Link>
           <Link href="/docs" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            Docs
+            Components
           </Link>
         </div>
         <nav className="flex items-center gap-5 text-sm text-muted-foreground">
