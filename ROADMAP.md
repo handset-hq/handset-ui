@@ -10,7 +10,9 @@ if your use case should reorder this list.
 optimistic send), `messaging` (two-pane block), `opt-in-form`,
 `texting-readiness`, `quick-replies` (tappable canned responses),
 `message-templates` (`{{variable}}` merge), `broadcast-composer`
-(send-to-many, one call each, opt-outs surfaced per recipient).
+(send-to-many, one call each, opt-outs surfaced per recipient),
+`quick-replies`, `quiet-hours` (a sending-window guard — warns and gates the
+send button outside allowed local hours).
 
 **Messaging primitives** — `message-bubble`, `delivery-status`,
 `message-group` (iMessage-style same-side clustering), `date-divider`
@@ -52,8 +54,11 @@ calls, voicemails), `phone-system` (3-tab mega-block), `next-routes` /
 `express-routes` / `remix-routes` (the server proxy that keeps your API key
 off the client, for Next.js, Express, and Remix / React Router 7).
 
-**Observability** — `event-log` (live realtime event inspector, filterable,
-raw payload per row — dogfoods `useHandsetEvents`).
+**Observability & analytics** — `event-log` (live realtime event inspector,
+filterable, raw payload per row — dogfoods `useHandsetEvents`),
+`usage-meter`, `usage-dashboard` (per-kind breakdown with bars and optional
+spend from your rates), `deliverability-panel` (delivery rate + failure-reason
+breakdown, aggregated from a recent message sample).
 
 **Realtime** — `<HandsetProvider realtime>` connects the browser to the
 event stream (`wss://media.handset.dev/v1/events`, short-lived tokens via
@@ -68,13 +73,13 @@ a 60s safety net. `useHandsetEvents` exposes the raw stream.
 
 ## Next
 
-Prioritized by capability-to-UI gap — the Handset API supports each of these
-today with no component to drive it.
-
-1. **Analytics** — `usage-dashboard` (messages/minutes/spend over time) and a
-   `deliverability-panel` (failure-reason breakdown), beyond the single
-   `usage-meter`.
-2. **Scheduled send** — quiet-hours awareness in `composer` / `broadcast-composer`.
+1. **Scheduled send (needs an API change first)** — real deferral requires a
+   `send_at` field on `POST /messages` in the Handset API; today it sends
+   immediately, so `quiet-hours` ships only the prevent-ill-timed-sends half.
+   Add `send_at` server-side, then a scheduled-send composer.
+2. **Deeper analytics (needs an API change first)** — a tenant-facing stats
+   endpoint would let `usage-dashboard` show a real time series and
+   `deliverability-panel` cover long windows without client-side sampling.
 
 ## Later / exploring
 

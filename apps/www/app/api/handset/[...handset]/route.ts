@@ -15,6 +15,7 @@ interface DemoMessage {
   body: string | null;
   media_urls?: string[];
   status: string;
+  error_code?: string | null;
   segments: number;
   created_at: string;
 }
@@ -61,6 +62,8 @@ const seedMessages: DemoMessage[] = [
   msg("cnv_demo_jordan", "inbound", "Can we move my appointment to Friday?", 49, "received"),
   msg("cnv_demo_sam", "outbound", "Your order is ready for pickup!", 60 * 27, "delivered"),
   msg("cnv_demo_sam", "inbound", "STOP", 60 * 26, "received"),
+  { ...msg("cnv_demo_sam", "outbound", "One more thing about your order…", 60 * 25, "failed"), error_code: "recipient_opted_out" },
+  { ...msg("cnv_demo_jordan", "outbound", "Reminder: invoice #1042 is overdue.", 60 * 8, "failed"), error_code: "carrier_rejected" },
 ];
 
 function msg(cid: string, direction: "inbound" | "outbound", body: string, minAgo: number, status: string): DemoMessage {
