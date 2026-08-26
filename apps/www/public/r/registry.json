@@ -63,6 +63,19 @@
       ]
     },
     {
+      "name": "quiet-hours",
+      "type": "registry:component",
+      "title": "Quiet hours",
+      "description": "A sending-hours guard: warns when it's outside the allowed local window and gates your send button.",
+      "files": [
+        {
+          "path": "registry/new-york/quiet-hours/quiet-hours.tsx",
+          "type": "registry:component",
+          "target": "components/handset/quiet-hours.tsx"
+        }
+      ]
+    },
+    {
       "name": "thread",
       "type": "registry:component",
       "title": "Thread",
@@ -505,6 +518,38 @@
           "path": "registry/new-york/usage-meter/usage-meter.tsx",
           "type": "registry:component",
           "target": "components/handset/usage-meter.tsx"
+        }
+      ]
+    },
+    {
+      "name": "usage-dashboard",
+      "type": "registry:component",
+      "title": "Usage dashboard",
+      "description": "Per-kind usage breakdown for a period with comparative bars and optional spend from your rates.",
+      "dependencies": [
+        "@handset/react"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/usage-dashboard/usage-dashboard.tsx",
+          "type": "registry:component",
+          "target": "components/handset/usage-dashboard.tsx"
+        }
+      ]
+    },
+    {
+      "name": "deliverability-panel",
+      "type": "registry:component",
+      "title": "Deliverability panel",
+      "description": "Outbound delivery rate and failure-reason breakdown, aggregated from a recent message sample.",
+      "dependencies": [
+        "@handset/react"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/deliverability-panel/deliverability-panel.tsx",
+          "type": "registry:component",
+          "target": "components/handset/deliverability-panel.tsx"
         }
       ]
     },
